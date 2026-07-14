@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoja de Ruta — Plan de 1 mes</title>
+<style>
+  :root{
+    --bg: #F7F5EF;
+    --paper: #FFFFFF;
+    --ink: #1C2320;
+    --ink-soft: #4A524C;
+    --pitch: #2F6F4E;
+    --pitch-dark: #1F4E36;
+    --gold: #B8912E;
+    --line: #E3DFD3;
+    --tag-bg: #EEF3EC;
+    --am-bg:#EDF2FB; --am-line:#B9CBEE; --am-ink:#2C4E8A;
+    --pm-bg:#FBF1E4; --pm-ink:#8A5A12; --pm-line:#DFC28A;
+    --su-bg:#F3E9F2; --su-ink:#7A3E74; --su-line:#DFC1DB;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.6; font-size:16px;
+  }
+  .display{ font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 24px 120px; }
+
+  header.hero{ padding:64px 0 36px; border-bottom:1px solid var(--line); margin-bottom:36px; }
+  .eyebrow{ text-transform:uppercase; letter-spacing:.14em; font-size:12.5px; color:var(--pitch); font-weight:700; margin-bottom:14px; }
+  h1.title{ font-size:38px; line-height:1.14; margin:0 0 14px; max-width:22ch; }
+  .subtitle{ color:var(--ink-soft); font-size:16.5px; max-width:64ch; margin:0 0 22px; }
+  .meta-row{ display:flex; gap:20px; flex-wrap:wrap; font-size:13.5px; color:var(--ink-soft); }
+  .meta-row b{ color:var(--ink); }
+
+  .legend{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:44px; }
+  .legend span{ font-size:12.5px; padding:5px 12px; border-radius:20px; font-weight:700; letter-spacing:.02em; }
+  .legend .am{ background:var(--am-bg); color:var(--am-ink); border:1px solid var(--am-line); }
+  .legend .pm{ background:var(--pm-bg); color:var(--pm-ink); border:1px solid var(--pm-line); }
+  .legend .su{ background:var(--su-bg); color:var(--su-ink); border:1px solid var(--su-line); }
+
+  .week{ margin-bottom:64px; }
+  .week-head{ display:flex; align-items:baseline; gap:16px; margin-bottom:6px; flex-wrap:wrap; }
+  .week-num{ font-family:Georgia,serif; font-size:15px; color:var(--gold); font-weight:700; }
+  h2.week-title{ font-size:26px; margin:0; color:var(--ink); }
+  .week-range{ font-size:13.5px; color:var(--ink-soft); }
+  .week-goal{
+    background:var(--paper); border:1px solid var(--line); border-left:4px solid var(--pitch);
+    border-radius:0 10px 10px 0; padding:16px 20px; margin:16px 0 26px; font-size:15px;
+  }
+  .week-goal b{ color:var(--pitch-dark); }
+
+  .day{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    padding:22px 24px; margin-bottom:18px;
+  }
+  .day-head{ display:flex; align-items:baseline; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+  .day-name{ font-family:Georgia,serif; font-size:19px; color:var(--pitch-dark); font-weight:700; }
+  .day-date{ font-size:13px; color:var(--ink-soft); }
+  .day-obj{ font-size:14.5px; color:var(--ink-soft); margin-bottom:14px; }
+  .day-obj b{ color:var(--ink); }
+
+  .task{ border-top:1px dashed var(--line); padding:14px 0; }
+  .task:first-of-type{ border-top:none; padding-top:0; }
+  .task-head{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .tag{ font-size:11px; padding:3px 9px; border-radius:20px; font-weight:700; letter-spacing:.03em; }
+  .tag.am{ background:var(--am-bg); color:var(--am-ink); border:1px solid var(--am-line); }
+  .tag.pm{ background:var(--pm-bg); color:var(--pm-ink); border:1px solid var(--pm-line); }
+  .tag.su{ background:var(--su-bg); color:var(--su-ink); border:1px solid var(--su-line); }
+  .task-title{ font-weight:700; font-size:15px; color:var(--ink); }
+  .task-detail{ font-size:14.5px; color:var(--ink-soft); margin:0 0 8px; }
+  .deliverable{
+    font-size:13.5px; background:var(--tag-bg); border:1px solid var(--line);
+    border-radius:8px; padding:8px 12px; color:var(--pitch-dark);
+  }
+  .deliverable b{ color:var(--ink); }
+
+  .divider{ height:1px; background:var(--line); margin:8px 0 36px; }
+
+  footer{ border-top:1px solid var(--line); padding-top:24px; color:var(--ink-soft); font-size:13px; }
+
+  @media (max-width:640px){
+    header.hero{ padding-top:44px; }
+    h1.title{ font-size:28px; }
+  }
+  @media print{
+    body{ background:white; }
+    .day{ break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Plan de 1 mes — Semana a semana, día a día</div>
+    <h1 class="title display">Hoja de ruta: ingresos ya, startup en construcción</h1>
+    <p class="subtitle">Regla del mes: 80% del esfuerzo en generar ingresos vía agencia, 20% en sentar bases de la startup de gestión para clubes de fútbol amateur. Cada tarea incluye su detalle y un ejemplo concreto de entregable.</p>
+    <div class="meta-row">
+      <span>Inicio: <b>lunes 6 de julio, 2026</b></span>
+      <span>Cierre: <b>domingo 2 de agosto, 2026</b></span>
+      <span>Meta del mes: <b>ingresos o pipeline que extiendan el runway más allá de los 3 meses</b></span>
+    </div>
+  </header>
+
+  <div class="legend">
+    <span class="am">AM · Bloque mañana</span>
+    <span class="pm">PM · Bloque tarde</span>
+    <span class="su">Startup · Bloque 20%</span>
+  </div>
+
+  <!-- ================= SEMANA 1 ================= -->
+  <div class="week">
+    <div class="week-head">
+      <span class="week-num">Semana 1</span>
+      <h2 class="week-title">Armar la oferta y la máquina de prospección</h2>
+      <span class="week-range">6 – 12 de julio</span>
+    </div>
+    <div class="week-goal"><b>Objetivo de la semana:</b> tener oferta, portafolio y lista de prospectos listos, y haber empezado a enviar mensajes de prospección antes del viernes.</div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Lunes</span><span class="day-date">6 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> tener la oferta comercial lista para mostrar a cualquier prospecto.</div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Definir y pulir 3 paquetes de servicio con precio fijo</span></div>
+        <p class="task-detail">Define paquetes para web, chatbot y automatización, cada uno con alcance cerrado, plazo de entrega y precio fijo (no por hora). Usa la lógica de "precio de entrada competitivo + mensualidad que no se negocia" del modelo de negocio.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> documento de 1 página tipo tabla — "Paquete Web Básica: landing 1 página, formulario de contacto, entrega en 5 días hábiles, $45.000 + $20.000/mes mantención".</div>
+      </div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Redactar plantillas de mensaje de prospección</span></div>
+        <p class="task-detail">Una plantilla por segmento (pymes, clubes/organizaciones deportivas, conocidos). Personalizada al dolor probable de cada segmento, no genérica. Debe abrir con un problema concreto, no con "somos una agencia que hace...".</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> documento con 3 mensajes cortos (60-80 palabras cada uno) listos para copiar y pegar en WhatsApp/LinkedIn/email.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Martes</span><span class="day-date">7 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> tener la lista de prospectos completa y haber enviado los primeros mensajes.</div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Completar lista de 50-80 prospectos</span></div>
+        <p class="task-detail">Incluye pymes locales, otros clubes/organizaciones, y conocidos de conocidos. Prioriza negocios donde ya intuyes un dolor concreto (agenda, cobros, atención al cliente).</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> planilla con columnas: nombre, rubro, contacto, canal (WhatsApp/email/LinkedIn), por qué lo elegiste, estado (sin contactar).</div>
+      </div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Enviar los primeros 10-15 mensajes de prospección</span></div>
+        <p class="task-detail">Usa las plantillas de ayer, personalizando el primer renglón con algo específico del negocio (nombre, algo que viste en su web/redes).</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> planilla actualizada con estado "contactado" + fecha de envío por cada prospecto.</div>
+      </div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag su">Startup</span><span class="task-title">Hipótesis de dolor + lista de tesoreros a entrevistar</span></div>
+        <p class="task-detail">Escribe 5-10 hipótesis sobre qué problemas tienen otros clubes en su gestión de tesorería (a partir de tu propia experiencia). Arma una lista de 10 tesoreros de otros clubes a los que podrías entrevistar.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> documento con lista numerada de hipótesis + tabla de 10 contactos con club, nombre y vía de contacto.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Miércoles</span><span class="day-date">8 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> mantener el ritmo de prospección y tener portafolio listo.</div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">10-15 mensajes nuevos + seguimiento a los de martes</span></div>
+        <p class="task-detail">Seguimiento no es repetir el mismo mensaje — agrega algo nuevo (ej. "vi que también tienen [otro canal], ¿les sirve algo similar ahí?").</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> planilla con columna "último seguimiento" actualizada.</div>
+      </div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Terminar el portafolio</span></div>
+        <p class="task-detail">Landing simple de una página, o PDF si no alcanza el tiempo, mostrando tu app de tesorería como caso de estudio: qué problema resolvió, cómo se ve, qué resultado tuvo.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> página web de una sección o PDF de 1-2 páginas con capturas de la app + 3-4 líneas de contexto.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Jueves</span><span class="day-date">9 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> agendar las primeras reuniones y avanzar en la validación de la startup.</div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">10-15 mensajes nuevos + seguimientos</span></div>
+        <p class="task-detail">Mantén el volumen aunque todavía no haya respuestas — la conversión llega con el volumen acumulado, no con mensajes aislados.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> planilla con al menos 45-50 prospectos ya contactados en total.</div>
+      </div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Agendar reuniones con quienes respondieron</span></div>
+        <p class="task-detail">Prioriza llamada corta (15-20 min) por sobre intercambio largo de mensajes — se cierra más rápido en conversación directa.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> 2-4 reuniones agendadas en el calendario para la próxima semana.</div>
+      </div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag su">Startup</span><span class="task-title">Contactar a los 10 tesoreros para agendar entrevistas</span></div>
+        <p class="task-detail">Mensaje corto explicando que es una conversación de 10-15 minutos, sin venta de por medio, solo para entender su realidad.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> 2-3 entrevistas agendadas para la semana 2.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Viernes</span><span class="day-date">10 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> cerrar la semana con métricas claras y ajustar lo que no esté funcionando.</div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">10-15 mensajes nuevos + seguimientos</span></div>
+        <p class="task-detail">Igual que días anteriores; para este punto deberías tener contactados a la mayoría de los 50-80 prospectos iniciales.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> lista de prospectos con estado actualizado al 90-100% contactados.</div>
+      </div>
+
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Revisión de la semana</span></div>
+        <p class="task-detail">Calcula tasa de respuesta (respuestas / mensajes enviados). Si es baja (menor a 10-15%), revisa si el mensaje es genérico o si el segmento elegido no es el correcto.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> nota corta con 3 números: mensajes enviados, respuestas, reuniones agendadas.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Sábado</span><span class="day-date">11 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> mantener el impulso sin quemarte.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Prospección liviana + preparar reuniones de la próxima semana</span></div>
+        <p class="task-detail">Bloque corto de 2-3 horas: algunos mensajes nuevos y preparar qué vas a mostrar/decir en las reuniones agendadas.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> guion corto de 5-6 puntos para la reunión de venta (qué preguntar, qué mostrar, cómo cerrar).</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Domingo</span><span class="day-date">12 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> descanso y definición del objetivo numérico de la semana 2.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Repaso semanal</span></div>
+        <p class="task-detail">Revisa las métricas del viernes y define una meta concreta para la semana 2 (ej. "cerrar al menos 1 cliente").</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> nota con el objetivo numérico de la semana 2.</div>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- ================= SEMANA 2 ================= -->
+  <div class="week">
+    <div class="week-head">
+      <span class="week-num">Semana 2</span>
+      <h2 class="week-title">Sprint de ventas</h2>
+      <span class="week-range">13 – 19 de julio</span>
+    </div>
+    <div class="week-goal"><b>Objetivo de la semana:</b> agendar 5-8 reuniones y cerrar tu primer cliente, aunque sea con descuento de lanzamiento.</div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Lunes</span><span class="day-date">13 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> retomar prospección y ejecutar las reuniones agendadas la semana pasada.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Prospección continua (10 mensajes nuevos)</span></div>
+        <p class="task-detail">No pares la máquina de prospección solo porque tienes reuniones — el pipeline se vacía rápido si dejas de alimentarlo.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> 10 nuevos prospectos contactados.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Llamadas con quienes respondieron el fin de semana</span></div>
+        <p class="task-detail">Objetivo de cada llamada: entender el problema real del prospecto y, si calza, avanzar a propuesta formal.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> notas de la llamada con el dolor específico del prospecto y próximos pasos acordados.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Martes</span><span class="day-date">14 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> enviar la primera propuesta formal.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Seguimientos + preparar propuesta formal</span></div>
+        <p class="task-detail">Para el prospecto más caliente, arma una cotización concreta: alcance, plazo, precio de entrada + mensualidad, condiciones de pago.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> documento de propuesta de 1-2 páginas, con logo/nombre de tu agencia, alcance detallado y precio.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Enviar propuesta al prospecto caliente</span></div>
+        <p class="task-detail">Acompaña el envío con un mensaje corto preguntando si tiene dudas, no solo el archivo adjunto.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> propuesta enviada + fecha de seguimiento agendada (2-3 días después).</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag su">Startup</span><span class="task-title">Entrevista con tesorero #1</span></div>
+        <p class="task-detail">Conversación de 10-15 min, solo preguntas abiertas sobre cómo gestionan hoy la tesorería del club, qué les cuesta más, qué usan actualmente.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> notas de la entrevista con 3-5 citas o ideas clave del tesorero.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Miércoles</span><span class="day-date">15 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> avanzar hacia el cierre del primer contrato.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Prospección continua</span></div>
+        <p class="task-detail">10 mensajes nuevos, sin descuidar el pipeline mientras negocias el primer cierre.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> 10 nuevos prospectos contactados.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Negociación y cierre con el prospecto caliente</span></div>
+        <p class="task-detail">Resuelve objeciones (precio, plazo, propiedad del código). Si acepta, define fecha de inicio y forma de pago del anticipo.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> contrato/acuerdo simple firmado o confirmado por escrito (WhatsApp/email cuenta como aceptación si no hay contrato formal aún).</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Jueves</span><span class="day-date">16 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> arrancar el proyecto cerrado sin descuidar el pipeline.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Kickoff del cliente cerrado</span></div>
+        <p class="task-detail">Reunión breve para levantar requerimientos concretos: contenido, imágenes, accesos, plazos de entrega de material de su parte.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> documento de brief con toda la información necesaria para empezar a desarrollar.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Seguir prospectando</span></div>
+        <p class="task-detail">10 mensajes nuevos + seguimientos a propuestas pendientes.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> planilla de prospección actualizada.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag su">Startup</span><span class="task-title">Entrevista con tesorero #2</span></div>
+        <p class="task-detail">Mismo formato que la entrevista anterior; busca patrones comunes con la primera conversación.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> notas de la entrevista + comparación rápida con la entrevista #1.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Viernes</span><span class="day-date">17 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> avanzar en el desarrollo del proyecto y cerrar la semana.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Avance de desarrollo del proyecto cerrado</span></div>
+        <p class="task-detail">Bloque de trabajo técnico dedicado, sin prospección, para no atrasarte con el cliente que ya te pagó.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> avance funcional mostrable (ej. estructura básica de la web o flujo principal del chatbot).</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Revisión de la semana</span></div>
+        <p class="task-detail">Revisa si lograste el objetivo de cerrar al menos 1 cliente. Si no, identifica en qué etapa se cayeron los prospectos (no respondieron, dijeron no, quedaron pensando).</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> nota con métricas: reuniones realizadas, propuestas enviadas, contratos cerrados.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Sábado</span><span class="day-date">18 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> avanzar desarrollo o prospección liviana, según lo que necesites más.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Bloque flexible: desarrollo o prospección</span></div>
+        <p class="task-detail">Si tienes un cliente cerrado, prioriza el desarrollo. Si no, prioriza prospección liviana.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> avance de desarrollo o 5-10 mensajes nuevos.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Domingo</span><span class="day-date">19 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> planificar la semana de entrega.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Repaso semanal + plan semana 3</span></div>
+        <p class="task-detail">Define qué falta para entregar el proyecto cerrado y qué prospectos siguen calientes para la semana 3.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> lista de tareas pendientes para terminar el proyecto + lista de prospectos a retomar.</div>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- ================= SEMANA 3 ================= -->
+  <div class="week">
+    <div class="week-head">
+      <span class="week-num">Semana 3</span>
+      <h2 class="week-title">Entregar y seguir vendiendo</h2>
+      <span class="week-range">20 – 26 de julio</span>
+    </div>
+    <div class="week-goal"><b>Objetivo de la semana:</b> entregar el primer proyecto con calidad, conseguir testimonio/referido, y ofrecer el componente recurrente que realmente extiende tu runway.</div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Lunes</span><span class="day-date">20 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> avanzar el desarrollo sin descuidar el pipeline.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Desarrollo del proyecto</span></div>
+        <p class="task-detail">Continúa construyendo según el brief del kickoff.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> avance funcional adicional (ej. formulario funcionando, flujo de chatbot probado).</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Seguir prospección</span></div>
+        <p class="task-detail">Retoma prospectos pendientes de semanas anteriores que no habían respondido.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> 5-10 mensajes de seguimiento enviados.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Martes</span><span class="day-date">21 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> mismo ritmo, acercándose a la entrega.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Desarrollo del proyecto</span></div>
+        <p class="task-detail">Prioriza dejar la funcionalidad principal (core) terminada antes que detalles menores.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> versión funcional casi completa, lista para pruebas.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Seguimientos de prospección</span></div>
+        <p class="task-detail">Enfócate en prospectos que mostraron interés pero no cerraron aún.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> planilla actualizada con estado de cada propuesta pendiente.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Miércoles</span><span class="day-date">22 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> entregar el proyecto al cliente.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Testing final</span></div>
+        <p class="task-detail">Revisa que todo funcione en distintos dispositivos/navegadores antes de entregar.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> checklist de pruebas completado (funciona en celular, formulario envía datos, etc.).</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Entrega y capacitación breve al cliente</span></div>
+        <p class="task-detail">Llamada corta o video mostrando cómo usar el sistema, más un documento simple de instrucciones.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> proyecto entregado en producción + guía rápida de uso de 1 página.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Jueves</span><span class="day-date">23 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> capitalizar la entrega (testimonio, referido, recurrente).</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Pedir testimonio y referido</span></div>
+        <p class="task-detail">Pide el testimonio apenas el cliente use el sistema y quede conforme — es el momento de mayor satisfacción.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> testimonio corto por escrito (2-3 frases) para usar en tu portafolio.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Prospección continua</span></div>
+        <p class="task-detail">10 mensajes nuevos, manteniendo el pipeline vivo.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> 10 nuevos prospectos contactados.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Viernes</span><span class="day-date">24 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> cerrar la semana y sintetizar aprendizajes de la startup.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Revisión de la semana</span></div>
+        <p class="task-detail">Verifica si el cliente entregado sigue pagando la mensualidad y si el pipeline de nuevos prospectos sigue avanzando.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> nota con métricas: 1 cliente entregado + X en pipeline.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag su">Startup</span><span class="task-title">Sintetizar entrevistas de tesoreros</span></div>
+        <p class="task-detail">Junta las notas de las 2-3 entrevistas y extrae patrones: problemas comunes, disposición a pagar, qué tan distinta es tu app de lo que ya usan (Excel, WhatsApp, nada).</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> documento de 1 página con hallazgos clave y una conclusión sobre el interés real detectado.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Sábado</span><span class="day-date">25 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> preparar la semana de consolidación.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Prospección liviana + preparar semana 4</span></div>
+        <p class="task-detail">Revisa qué prospectos calientes quedan para cerrar en la última semana del mes.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> lista corta de 3-5 prospectos prioritarios para semana 4.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Domingo</span><span class="day-date">26 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> definir objetivos de cierre de mes.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Repaso + objetivos semana 4</span></div>
+        <p class="task-detail">Define la meta numérica final: cuántos clientes recurrentes o pipeline caliente necesitas para sentir que el mes valió la pena.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> nota con objetivo concreto para la semana 4.</div>
+      </div>
+    </div>
+  </div>
+  <div class="divider"></div>
+
+  <!-- ================= SEMANA 4 ================= -->
+  <div class="week">
+    <div class="week-head">
+      <span class="week-num">Semana 4</span>
+      <h2 class="week-title">Consolidar pipeline y sentar el siguiente paso de la startup</h2>
+      <span class="week-range">27 de julio – 2 de agosto</span>
+    </div>
+    <div class="week-goal"><b>Objetivo de la semana:</b> cerrar clientes recurrentes adicionales o dejar un pipeline caliente para el mes 2, y definir el alcance mínimo (MVP) de la startup con base en lo validado.</div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Lunes</span><span class="day-date">27 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> retomar y presionar los cierres pendientes.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Seguimiento a propuestas calientes</span></div>
+        <p class="task-detail">Contacta directamente a los prospectos que quedaron "pensando" en semanas anteriores.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> mensajes de seguimiento enviados a cada prospecto caliente.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Negociación de cierres</span></div>
+        <p class="task-detail">Resuelve últimas objeciones de precio o alcance.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> al menos 1 acuerdo verbal/escrito de cierre.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Martes</span><span class="day-date">28 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> cerrar el segundo o tercer cliente del mes.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Cierre de cliente adicional</span></div>
+        <p class="task-detail">Confirma condiciones de pago y fecha de inicio.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> segundo contrato/acuerdo cerrado del mes.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Onboarding del nuevo cliente</span></div>
+        <p class="task-detail">Kickoff igual al de la semana 2: levantar requerimientos concretos.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> documento de brief del nuevo proyecto.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Miércoles</span><span class="day-date">29 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> avanzar desarrollo y mantener el pipeline vivo.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Avance de desarrollo del nuevo proyecto</span></div>
+        <p class="task-detail">Bloque de trabajo técnico dedicado.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> primer avance funcional mostrable al nuevo cliente.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Prospección liviana</span></div>
+        <p class="task-detail">Mantén algunos mensajes nuevos saliendo, aunque el foco esté en entregar.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> 5 mensajes nuevos enviados.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Jueves</span><span class="day-date">30 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> dar el siguiente paso concreto en la startup.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag su">Startup</span><span class="task-title">Definir el alcance mínimo (MVP) de la app de tesorería</span></div>
+        <p class="task-detail">Con base en la síntesis de entrevistas de la semana 3, define qué funcionalidades son realmente el mínimo necesario para que otro club la use (no todo lo que a ti te gustaría construir).</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> lista de 5-8 funcionalidades mínimas del MVP, priorizadas.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag su">Startup</span><span class="task-title">Redactar plan de 90 días</span></div>
+        <p class="task-detail">Plan a alto nivel de qué harías en los próximos 3 meses con la startup si tuvieras más tiempo disponible (no lo ejecutas aún, solo queda listo para cuando el ingreso lo permita).</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> documento con 3 hitos, uno por mes (ej. mes 1: pulir MVP con tu club; mes 2: piloto con 1-2 clubes externos; mes 3: evaluar cobro).</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Viernes</span><span class="day-date">31 de julio</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> revisión honesta de cierre de mes.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag am">AM</span><span class="task-title">Revisión de ingresos y pipeline del mes</span></div>
+        <p class="task-detail">Suma ingresos generados + valor de pipeline caliente. Compáralo con tu runway restante: ¿te da margen para seguir sin el finiquito?</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> resumen con: clientes cerrados, ingreso mensual recurrente total, pipeline en curso.</div>
+      </div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Definir proporción 80/20 para el mes 2</span></div>
+        <p class="task-detail">Con base en el resultado real (no en el deseo), decide si mantienes 80/20 agencia/startup o ajustas la proporción hacia más startup.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> nota de decisión con la nueva proporción y su justificación.</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Sábado</span><span class="day-date">1 de agosto</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> descanso o trabajo liviano según cómo vaya el mes.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Bloque flexible</span></div>
+        <p class="task-detail">Si hay proyectos en curso, avanza desarrollo. Si no, descansa — llegaste con disciplina todo el mes, te lo ganaste.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> — (día de descanso o avance libre).</div>
+      </div>
+    </div>
+
+    <div class="day">
+      <div class="day-head"><span class="day-name">Domingo</span><span class="day-date">2 de agosto</span></div>
+      <div class="day-obj"><b>Objetivo del día:</b> cierre formal del mes y plan para el mes 2.</div>
+      <div class="task">
+        <div class="task-head"><span class="tag pm">PM</span><span class="task-title">Cierre de mes + plan mes 2</span></div>
+        <p class="task-detail">Con las métricas reales del mes, arma la hoja de ruta del siguiente mes ajustando la proporción agencia/startup ya definida el viernes.</p>
+        <div class="deliverable"><b>Entregable ejemplo:</b> documento de plan del mes 2, con la misma estructura de este documento.</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Hoja de ruta viva: actualízala cada domingo con resultados reales (clientes cerrados, ingresos, avance de la startup) para que el mes 2 se planifique con datos, no con supuestos.
+  </footer>
+
+</div>
+</body>
+</html>

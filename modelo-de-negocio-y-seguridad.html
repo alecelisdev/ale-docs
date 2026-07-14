@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo de Negocio y Medidas de Seguridad — Agencia Digital</title>
+<style>
+  :root{
+    --bg: #F7F5EF;
+    --paper: #FFFFFF;
+    --ink: #1C2320;
+    --ink-soft: #4A524C;
+    --pitch: #2F6F4E;
+    --pitch-dark: #1F4E36;
+    --gold: #B8912E;
+    --line: #E3DFD3;
+    --tag-bg: #EEF3EC;
+    --warn-bg: #FBF1E4;
+    --warn-line: #DFC28A;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  .display{
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  }
+
+  /* ---------- Layout shell ---------- */
+  .wrap{
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px 120px;
+  }
+  header.hero{
+    padding: 72px 0 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+  .eyebrow{
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-size: 12.5px;
+    color: var(--pitch);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  h1.title{
+    font-size: 40px;
+    line-height: 1.12;
+    margin: 0 0 14px;
+    color: var(--ink);
+    max-width: 20ch;
+  }
+  .subtitle{
+    color: var(--ink-soft);
+    font-size: 17px;
+    max-width: 62ch;
+    margin: 0 0 22px;
+  }
+  .meta-row{
+    display:flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  .meta-row span b{ color: var(--ink); }
+
+  /* ---------- TOC ---------- */
+  nav.toc{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin-bottom: 56px;
+  }
+  nav.toc h2{
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--pitch);
+    margin: 0 0 12px;
+  }
+  nav.toc ol{
+    margin:0; padding-left: 20px;
+    columns: 2;
+    column-gap: 30px;
+  }
+  nav.toc li{ margin-bottom: 8px; font-size: 14.5px; break-inside: avoid;}
+  nav.toc a{ color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+  nav.toc a:hover{ border-bottom-color: var(--pitch); }
+
+  /* ---------- Sections ---------- */
+  section{
+    margin-bottom: 64px;
+    scroll-margin-top: 24px;
+  }
+  .sec-num{
+    font-family: Georgia, serif;
+    font-size: 14px;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: .04em;
+  }
+  h2.sec-title{
+    font-size: 27px;
+    margin: 4px 0 20px;
+    color: var(--ink);
+  }
+  h3{
+    font-size: 18px;
+    margin: 30px 0 10px;
+    color: var(--pitch-dark);
+  }
+  p{ margin: 0 0 14px; color: var(--ink); }
+  ul, ol{ margin: 0 0 16px; padding-left: 22px; }
+  li{ margin-bottom: 7px; }
+
+  .card{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px 26px;
+    margin-bottom: 18px;
+  }
+
+  /* ---------- Pricing table ---------- */
+  table{
+    width:100%;
+    border-collapse: collapse;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    font-size: 14.5px;
+  }
+  th, td{
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th{
+    background: var(--tag-bg);
+    color: var(--pitch-dark);
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  tr:last-child td{ border-bottom: none; }
+  td.num{ font-family: Georgia, serif; font-weight: 700; color: var(--pitch); white-space: nowrap; }
+
+  /* ---------- Checklist ---------- */
+  .checklist{ list-style: none; padding-left: 0; }
+  .checklist li{
+    display:flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .checklist li:last-child{ border-bottom: none; }
+  .checklist .box{
+    flex: 0 0 18px;
+    width: 18px; height:18px;
+    border: 1.5px solid var(--pitch);
+    border-radius: 4px;
+    margin-top: 2px;
+  }
+  .checklist .txt b{ display:block; color: var(--ink); }
+  .checklist .txt span{ color: var(--ink-soft); font-size: 14px; }
+
+  /* ---------- Rule box (decisiones tomadas) ---------- */
+  .rule{
+    border-left: 3px solid var(--pitch);
+    background: var(--tag-bg);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .rule b{ color: var(--pitch-dark); }
+
+  .warn{
+    border-left: 3px solid var(--warn-line);
+    background: var(--warn-bg);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .warn b{ color: #8A5A12; }
+
+  .tag{
+    display:inline-block;
+    background: var(--tag-bg);
+    color: var(--pitch-dark);
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    margin-right: 6px;
+  }
+  .tag.gap{ background: var(--warn-bg); color:#8A5A12; }
+
+  .divider{
+    height: 1px;
+    background: var(--line);
+    margin: 40px 0;
+  }
+
+  footer{
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+
+  @media (max-width: 640px){
+    header.hero{ padding-top: 44px; }
+    h1.title{ font-size: 30px; }
+    nav.toc ol{ columns: 1; }
+  }
+
+  @media print{
+    body{ background: white; }
+    nav.toc{ break-inside: avoid; }
+    section{ break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Documento de trabajo — Agencia + Startup</div>
+    <h1 class="title display">Modelo de negocio y medidas de seguridad</h1>
+    <p class="subtitle">Consolidado de decisiones tomadas sobre pricing, propiedad intelectual y protección de datos, más los aspectos que aún quedan por definir antes de cerrar el primer cliente.</p>
+    <div class="meta-row">
+      <span>Contexto: <b>Agencia de servicios digitales</b> (webs, chatbots, automatizaciones)</span>
+      <span>Aplica a: <b>Ley 21.719</b> (Chile)</span>
+      <span>Estado: <b>Borrador de trabajo — validar cláusulas con abogado antes de firmar contratos</b></span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h2>Contenido</h2>
+    <ol>
+      <li><a href="#modelo-precios">Modelo de precios (entrada + recurrente)</a></li>
+      <li><a href="#mejoras">Política de mejoras y nuevas funcionalidades</a></li>
+      <li><a href="#complejidad">Qué va incluido según complejidad técnica</a></li>
+      <li><a href="#propiedad">Propiedad intelectual y licencia de uso</a></li>
+      <li><a href="#reventa">Reutilización del desarrollo con otros clientes</a></li>
+      <li><a href="#datos">Ley 21.719 — qué cambia para el desarrollo</a></li>
+      <li><a href="#seguridad">Checklist de medidas de seguridad técnicas</a></li>
+      <li><a href="#faltantes">Aspectos aún sin definir</a></li>
+    </ol>
+  </nav>
+
+  <!-- 1 -->
+  <section id="modelo-precios">
+    <div class="sec-num">01</div>
+    <h2 class="sec-title">Modelo de precios: entrada + recurrente</h2>
+    <p>El mercado actual (sistemas completos vendidos en ~$150.000, apps de servicio técnico en $50.000 + $25.000/mes) fija un precio de entrada bajo como condición para cerrar ventas. La decisión es competir en el precio de entrada, pero <b>no</b> en el recurrente — ahí es donde se construye el ingreso real que extiende el runway.</p>
+
+    <div class="rule"><b>Decisión tomada:</b> precio de entrada competitivo con el mercado (no pelear esa batalla), pero la mensualidad no se regatea porque es lo que compone mes a mes.</div>
+
+    <table>
+      <tr><th>Componente</th><th>Rango sugerido</th><th>Lógica</th></tr>
+      <tr><td>Pago único de desarrollo</td><td class="num">$40.000 – $150.000 CLP</td><td>Según complejidad (ver sección 3). Compite con el mercado, no se sube "porque sí" a nuevos clientes salvo que haya trabajo real que lo respalde.</td></tr>
+      <tr><td>Mensualidad</td><td class="num">$20.000 – $30.000 CLP</td><td>Incluye soporte, mantención y costos de servicios de terceros. Este valor no se descuenta.</td></tr>
+      <tr><td>Mejora puntual (proyecto aparte)</td><td class="num">Cotización por alcance</td><td>Funcionalidad que el cliente usa una vez y queda (ver sección 2).</td></tr>
+    </table>
+
+    <p>A clientes nuevos se les puede subir el precio de entrada progresivamente a medida que exista trabajo/base de código que lo respalde (plantillas reutilizables, casos de éxito, mayor velocidad de entrega) — no como estrategia de anclaje con el mismo cliente, que rara vez migra a precios más altos por su cuenta.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 2 -->
+  <section id="mejoras">
+    <div class="sec-num">02</div>
+    <h2 class="sec-title">Política de mejoras y nuevas funcionalidades</h2>
+    <p>Regla para decidir si algo va incluido en la mensualidad, se cobra aparte, o sube la mensualidad:</p>
+
+    <h3>Incluido en la mensualidad</h3>
+    <ul>
+      <li>Soporte (dudas, bugs, algo que dejó de funcionar)</li>
+      <li>Costos de terceros: hosting, API de IA, dominio (si aplica)</li>
+      <li>Actualizaciones de seguridad y mantenimiento técnico</li>
+      <li>Ajustes menores (texto, precio, color, un campo)</li>
+    </ul>
+
+    <h3>Cobro único aparte</h3>
+    <p>Funcionalidad que el cliente <b>usa una vez y queda</b>: un reporte nuevo, un campo adicional, un ajuste de flujo puntual.</p>
+
+    <h3>Sube la mensualidad</h3>
+    <p>Funcionalidad que entrega <b>valor recurrente cada mes</b>: un módulo activo nuevo (ej. IA), una automatización que corre sola y ahorra tiempo de forma continua.</p>
+
+    <div class="rule"><b>Regla simple:</b> ¿esto se usa una vez y queda, o da valor todos los meses? Primera opción → cobro único. Segunda opción → sube la mensualidad.</div>
+
+    <p>Esta política debe quedar explícita por escrito en la propuesta/contrato inicial, aunque sea en 2-3 líneas, para no negociarla en caliente con cada cliente.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 3 -->
+  <section id="complejidad">
+    <div class="sec-num">03</div>
+    <h2 class="sec-title">Qué va incluido según complejidad técnica</h2>
+    <p>Ejemplo aplicado al caso de autenticación de usuarios, generalizable a otras funcionalidades:</p>
+
+    <table>
+      <tr><th>Funcionalidad</th><th>¿Incluida en precio base?</th><th>Motivo</th></tr>
+      <tr><td>Login simple (email/password) o "cada usuario ve solo lo suyo" (ej. rutina y progreso propios)</td><td class="num">Sí</td><td>Estándar de mercado hoy; rápido de implementar con herramientas actuales (Supabase Auth + Row Level Security). La complejidad no crece con la cantidad de usuarios.</td></tr>
+      <tr><td>Roles diferenciados (ej. entrenador ve el progreso de todos sus alumnos)</td><td class="num">No</td><td>Requiere lógica y vistas adicionales por rol. Es un tier superior o un cobro aparte.</td></tr>
+      <tr><td>Panel de administración con métricas agregadas</td><td class="num">No</td><td>Vista y lógica de negocio adicional, no es "cada usuario ve lo suyo".</td></tr>
+    </table>
+
+    <p>Pregunta clave para clasificar cualquier funcionalidad nueva: <i>¿el usuario final solo ve y gestiona sus propios datos, o alguien necesita ver/gestionar los datos de otros?</i> Lo segundo es lo que empuja el desarrollo a un tier superior.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 4 -->
+  <section id="propiedad">
+    <div class="sec-num">04</div>
+    <h2 class="sec-title">Propiedad intelectual y licencia de uso</h2>
+    <div class="warn"><b>Nota:</b> no reemplaza asesoría legal. Antes de usar estas cláusulas en un contrato real, conviene que las revise un abogado con experiencia en propiedad intelectual en Chile.</div>
+
+    <p>Por defecto, en la legislación chilena el autor/desarrollador conserva los derechos de autor del código, salvo cesión explícita y por escrito. Que el cliente pague por el desarrollo no lo convierte automáticamente en dueño del código fuente ni de la propiedad intelectual.</p>
+
+    <div class="rule"><b>Modelo por defecto:</b> licencia de uso, no cesión de propiedad. El cliente paga por tener el sistema funcionando para su negocio (uso exclusivo de su instancia y datos). El desarrollador conserva el código base, la arquitectura, y el derecho a reutilizarla con otros clientes.</div>
+
+    <p>Si un cliente pide exclusividad total o el código fuente, es un producto distinto — mucho más caro que el paquete estándar, y se negocia aparte.</p>
+
+    <p><b>Texto base sugerido para incluir en propuestas/contratos</b> (ajustar con apoyo legal):</p>
+    <div class="card">
+      <p style="margin:0; font-style: italic; color: var(--ink-soft);">"El desarrollo incluye una licencia de uso del sistema para [nombre del negocio]. El código fuente y la propiedad intelectual del software desarrollado pertenecen a [tu empresa/nombre], salvo acuerdo de cesión de derechos por separado."</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 5 -->
+  <section id="reventa">
+    <div class="sec-num">05</div>
+    <h2 class="sec-title">Reutilización del desarrollo con otros clientes</h2>
+    <p>Una idea o concepto general (ej. "app donde cada socio ve su rutina y progreso") no es propiedad intelectual protegible por sí sola. Lo protegido es el código fuente específico y el diseño concreto, no el patrón funcional. Construir una base de código nueva para un segundo cliente con un patrón similar no infringe propiedad intelectual del primero.</p>
+
+    <p>El riesgo real no es legal, es reputacional: si el cliente asumió implícitamente que su idea era única, descubrir que se vendió algo similar a la competencia directa puede dañar la relación y las referencias.</p>
+
+    <ul>
+      <li><span class="tag">Transparencia</span>Dejar explícito en el contrato que el desarrollo es una licencia de uso, no una idea exclusiva, y que el desarrollador puede ofrecer soluciones similares a otros clientes.</li>
+      <li><span class="tag">Exclusividad acotada</span>Se puede ofrecer, si se pide, no vender el mismo tipo de solución a competencia directa dentro de un radio geográfico definido — compromiso razonable y de bajo costo real dado el tamaño del mercado total.</li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 6 -->
+  <section id="datos">
+    <div class="sec-num">06</div>
+    <h2 class="sec-title">Ley 21.719 — qué cambia para el desarrollo</h2>
+    <p>Entra en plena vigencia el <b>1 de diciembre de 2026</b>. Aplica a toda organización que trate datos personales en Chile, sin importar el tamaño.</p>
+
+    <h3>Roles legales</h3>
+    <ul>
+      <li><b>Responsable del tratamiento:</b> el cliente (ej. el gimnasio, el club) — decide para qué se usan los datos.</li>
+      <li><b>Encargado del tratamiento:</b> el desarrollador/agencia — trata los datos por cuenta del cliente, como cualquier proveedor de TI externo.</li>
+    </ul>
+
+    <h3>Obligaciones contractuales</h3>
+    <p>El contrato con cada cliente debería incluir un Acuerdo de Tratamiento de Datos (ATD/DPA) que cubra: tipo de datos tratados, medidas de seguridad, confidencialidad, qué pasa con los datos al terminar el contrato, y notificación de brechas.</p>
+
+    <h3>Brechas de seguridad</h3>
+    <p>Notificación a la Agencia de Protección de Datos dentro de <b>72 horas</b> desde que se toma conocimiento de la vulneración; a los titulares afectados si el riesgo es alto.</p>
+
+    <h3>Sanciones</h3>
+    <p>Hasta 20.000 UTM (~$1.400 millones CLP) por infracción gravísima; hasta 4% de ingresos anuales en caso de reincidencia. Recaen principalmente sobre el responsable (el cliente), pero un incumplimiento originado en el sistema desarrollado puede derivar en responsabilidad contractual hacia la agencia.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 7 -->
+  <section id="seguridad">
+    <div class="sec-num">07</div>
+    <h2 class="sec-title">Checklist de medidas de seguridad técnicas</h2>
+    <p>Medidas mínimas a implementar por defecto en cualquier desarrollo con datos de usuarios, alineadas con la Ley 21.719:</p>
+
+    <ul class="checklist">
+      <li><div class="box"></div><div class="txt"><b>Cifrado en tránsito</b><span>HTTPS/TLS en toda comunicación cliente-servidor, sin excepciones.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Cifrado en reposo</b><span>Datos sensibles cifrados en la base de datos (contraseñas siempre hasheadas, nunca en texto plano).</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Control de acceso por usuario (Row Level Security)</b><span>Cada usuario solo puede leer/escribir sus propios datos; roles con permisos diferenciados donde corresponda.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Autenticación robusta</b><span>Contraseñas con requisitos mínimos, límite de intentos de login, opción de recuperación segura.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Registros de actividad (logs)</b><span>Trazabilidad de quién accedió a qué datos y cuándo, al menos para acciones sensibles.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Minimización de datos</b><span>Recolectar solo los datos estrictamente necesarios para la finalidad declarada al cliente.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Confidencialidad del equipo</b><span>Quien acceda a los datos (tú, futuros colaboradores) queda sujeto a confidencialidad, incluso después de terminar la relación con el cliente.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Plan de respuesta a incidentes</b><span>Procedimiento definido para detectar, contener y notificar una brecha dentro de 72 horas.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Backups periódicos</b><span>Copias de seguridad regulares, con prueba de restauración al menos una vez.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Gestión de subprocesadores</b><span>Si usas servicios de terceros (hosting, IA), verificar que también cumplan estándares de seguridad razonables.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b>Borrado/portabilidad de datos</b><span>Capacidad técnica de exportar o eliminar los datos de un usuario si lo solicita (derechos ARCO).</span></div></li>
+    </ul>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 8 -->
+  <section id="faltantes">
+    <div class="sec-num">08</div>
+    <h2 class="sec-title">Aspectos aún sin definir</h2>
+    <p>Temas que no han salido en las conversaciones hasta ahora y conviene resolver antes de cerrar el primer contrato formal:</p>
+
+    <ul class="checklist">
+      <li><div class="box"></div><div class="txt"><b><span class="tag gap">Pendiente</span>Condiciones de pago</b><span>Anticipo antes de empezar (ej. 50%), forma de pago (transferencia, otro), qué pasa si el cliente atrasa la mensualidad — ¿se suspende el servicio, después de cuántos días?</span></div></li>
+      <li><div class="box"></div><div class="txt"><b><span class="tag gap">Pendiente</span>Plazos de entrega y penalidades</b><span>Qué pasa si te atrasas tú, y qué pasa si el cliente no entrega información/contenido a tiempo y eso te atrasa a ti.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b><span class="tag gap">Pendiente</span>Garantía posterior a la entrega</b><span>Período de corrección de bugs sin costo tras el lanzamiento (ej. 15-30 días) antes de que cualquier cambio se cobre como soporte o mejora.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b><span class="tag gap">Pendiente</span>Política de cancelación</b><span>Qué pasa si el cliente quiere dar de baja el servicio recurrente: plazo de aviso, qué recibe (código, datos, backup) al salir.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b><span class="tag gap">Pendiente</span>Disponibilidad / SLA informal</b><span>Aunque sea básico, definir un tiempo de respuesta esperado ante una falla (ej. "respondo dentro de 24 horas hábiles").</span></div></li>
+      <li><div class="box"></div><div class="txt"><b><span class="tag gap">Pendiente</span>Estructura legal propia</b><span>Boletas de honorarios como persona natural vs. iniciar actividades/empresa — define cómo facturas y tu situación tributaria como trabajador independiente.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b><span class="tag gap">Pendiente</span>Separación agencia / startup</b><span>Cómo y cuándo migrar tiempo y foco de la agencia hacia la startup de gestión de clubes, y si el mismo vehículo legal sirve para ambas o conviene separarlas más adelante.</span></div></li>
+      <li><div class="box"></div><div class="txt"><b><span class="tag gap">Pendiente</span>Registro/evidencia para la Ley 21.719</b><span>Aunque la fiscalización plena parte en diciembre 2026, conviene ir documentando desde ahora qué datos trata cada proyecto, con qué finalidad y por cuánto tiempo (base del registro de actividades de tratamiento).</span></div></li>
+    </ul>
+  </section>
+
+  <footer>
+    Documento de trabajo generado a partir de las decisiones conversadas. Revisar cláusulas contractuales y de propiedad intelectual con un profesional legal antes de usarlas en contratos reales con clientes.
+  </footer>
+
+</div>
+</body>
+</html>

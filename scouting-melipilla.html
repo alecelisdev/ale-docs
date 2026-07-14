@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scouting Melipilla — Martes 14 de julio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#15110d;
+    --bg-card:#1f1a14;
+    --bg-card-alt:#26201a;
+    --line:#3a3024;
+    --cream:#efe7d8;
+    --muted:#a79c89;
+    --gold:#d3a94d;
+    --sage:#8a9a6e;
+    --red-card:#c1272d;
+    --yellow-card:#e2b93b;
+    --green-card:#6e8f55;
+    --rust:#b1502f;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(211,169,77,.08), transparent),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(138,154,110,.06), transparent),
+      var(--bg);
+    color:var(--cream);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    min-height:100vh;
+    padding-bottom:80px;
+  }
+  ::selection{background:var(--gold);color:#15110d;}
+  a{color:inherit;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+  /* ===== HEADER ===== */
+  header.hero{
+    padding:56px 24px 40px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .hero-inner{max-width:1180px;margin:0 auto;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12.5px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:flex;align-items:center;gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{content:'●';color:var(--red-card);font-size:10px;}
+  h1.title{
+    font-family:'Fraunces',serif;
+    font-optical-sizing:auto;
+    font-weight:600;
+    font-size:clamp(38px,6vw,68px);
+    line-height:1.02;
+    letter-spacing:-1px;
+    max-width:820px;
+  }
+  h1.title em{
+    font-style:italic;
+    font-weight:400;
+    color:var(--gold);
+  }
+  .hero-sub{
+    margin-top:18px;
+    max-width:640px;
+    color:var(--muted);
+    font-size:16px;
+  }
+  .hero-stats{
+    display:flex;gap:32px;
+    margin-top:32px;
+    flex-wrap:wrap;
+  }
+  .stat{font-family:'JetBrains Mono',monospace;}
+  .stat-num{font-size:26px;color:var(--gold);font-weight:600;}
+  .stat-label{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+
+  /* ===== ITINERARY STRIP (lineup) ===== */
+  section.lineup{
+    padding:40px 24px 8px;
+    border-bottom:1px solid var(--line);
+  }
+  .lineup-head{
+    max-width:1180px;margin:0 auto 20px;
+    display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;
+  }
+  .lineup-title{
+    font-family:'Fraunces',serif;font-weight:600;font-size:22px;
+  }
+  .lineup-note{
+    font-size:12.5px;color:var(--muted);max-width:420px;
+  }
+  .lineup-strip{
+    max-width:1180px;margin:0 auto;
+    display:flex;gap:14px;overflow-x:auto;padding:4px 4px 20px;
+    scrollbar-width:thin;
+  }
+  .lineup-strip::-webkit-scrollbar{height:6px;}
+  .lineup-strip::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+  .lineup-card{
+    flex:0 0 172px;
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 14px 16px;
+    cursor:pointer;
+    transition:.15s;
+    position:relative;
+  }
+  .lineup-card:hover{border-color:var(--gold);transform:translateY(-2px);}
+  .lineup-card .order{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;color:var(--muted);
+  }
+  .lineup-card .lname{
+    font-family:'Fraunces',serif;font-weight:600;font-size:15.5px;
+    margin-top:6px;line-height:1.2;
+  }
+  .lineup-card .ltime{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;color:var(--gold);margin-top:8px;
+  }
+  .card-dot{
+    position:absolute;top:14px;right:14px;
+    width:9px;height:13px;border-radius:2px;
+  }
+  .dot-alto{background:var(--red-card);}
+  .dot-medio{background:var(--yellow-card);}
+  .dot-bajo{background:var(--green-card);}
+
+  /* ===== FILTERS ===== */
+  section.filters{
+    padding:24px 24px 0;
+  }
+  .filters-inner{
+    max-width:1180px;margin:0 auto;
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+  }
+  .filter-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:1px;margin-right:4px;
+  }
+  .chip{
+    font-family:'Inter',sans-serif;font-size:13px;font-weight:500;
+    padding:7px 14px;border-radius:20px;border:1px solid var(--line);
+    background:transparent;color:var(--muted);cursor:pointer;transition:.15s;
+  }
+  .chip:hover{border-color:var(--gold);color:var(--cream);}
+  .chip.active{background:var(--gold);color:#15110d;border-color:var(--gold);}
+
+  /* ===== GRID ===== */
+  section.grid-section{padding:32px 24px 0;}
+  .grid{
+    max-width:1180px;margin:0 auto;
+    display:grid;grid-template-columns:1fr 1fr;gap:20px;
+  }
+  @media(max-width:860px){.grid{grid-template-columns:1fr;}}
+
+  .ficha{
+    background:var(--bg-card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    transition:.2s border-color;
+  }
+  .ficha.expanded{border-color:var(--gold);}
+  .ficha-head{
+    padding:20px 22px;
+    cursor:pointer;
+    display:flex;justify-content:space-between;gap:16px;
+  }
+  .ficha-head-left{flex:1;min-width:0;}
+  .ficha-order{
+    font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:11.5px;
+    display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;
+  }
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    text-transform:uppercase;letter-spacing:.5px;
+    padding:2px 8px;border-radius:20px;border:1px solid var(--line);color:var(--muted);
+  }
+  .tag.zone{border-color:var(--sage);color:var(--sage);}
+  .ficha-name{
+    font-family:'Fraunces',serif;font-weight:600;font-size:21px;line-height:1.15;
+  }
+  .ficha-rubro{color:var(--muted);font-size:13px;margin-top:3px;}
+  .ficha-meta-right{
+    text-align:right;flex-shrink:0;
+  }
+  .ficha-time{
+    font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:13px;white-space:nowrap;
+  }
+  .chevron{
+    margin-top:10px;font-size:13px;color:var(--muted);transition:.2s transform;display:inline-block;
+  }
+  .ficha.expanded .chevron{transform:rotate(180deg);}
+
+  .ficha-pain-preview{
+    padding:0 22px 18px;
+    font-size:13.5px;color:var(--cream);opacity:.85;
+    border-bottom:1px solid var(--line);
+    padding-bottom:18px;
+  }
+  .ficha-pain-preview b{color:var(--gold);font-weight:600;}
+
+  .ficha-body{
+    max-height:0;overflow:hidden;transition:max-height .3s ease;
+  }
+  .ficha.expanded .ficha-body{max-height:4000px;}
+  .ficha-body-inner{padding:20px 22px 26px;}
+
+  .fb-block{margin-bottom:20px;}
+  .fb-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;
+    letter-spacing:1.2px;color:var(--muted);margin-bottom:8px;
+  }
+  .fb-text{font-size:14px;color:var(--cream);}
+  .fb-positive{
+    background:rgba(138,154,110,.08);
+    border-left:3px solid var(--sage);
+    padding:12px 14px;border-radius:0 8px 8px 0;font-size:13.5px;
+  }
+
+  .dolor-item{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:10px;
+    background:var(--bg-card-alt);
+  }
+  .dolor-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px;}
+  .dolor-card-icon{
+    flex-shrink:0;width:14px;height:20px;border-radius:2px;margin-top:2px;
+  }
+  .dolor-text{font-size:13.5px;flex:1;}
+  .solucion-row{
+    display:flex;gap:8px;margin-top:8px;font-size:13px;color:var(--sage);
+  }
+  .solucion-row b{color:var(--sage);font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;padding-top:2px;}
+  .urgencia-label{
+    font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;
+    letter-spacing:.5px;color:var(--muted);white-space:nowrap;
+  }
+
+  .quote-box{
+    background:var(--bg-card-alt);
+    border-radius:10px;
+    padding:18px 20px;
+    position:relative;
+    font-family:'Fraunces',serif;font-style:italic;font-size:15.5px;line-height:1.5;
+    border-left:3px solid var(--gold);
+  }
+
+  .servicio-box{
+    background:linear-gradient(135deg, rgba(211,169,77,.12), rgba(211,169,77,.04));
+    border:1px solid rgba(211,169,77,.35);
+    border-radius:10px;padding:16px 18px;font-size:14px;
+  }
+  .servicio-box b{color:var(--gold);}
+
+  .nota-box{
+    font-size:12.5px;color:var(--muted);
+    border-top:1px dashed var(--line);
+    padding-top:14px;margin-top:4px;
+  }
+
+  .warning-banner{
+    background:rgba(193,39,45,.1);
+    border:1px solid rgba(193,39,45,.4);
+    border-radius:10px;
+    padding:12px 16px;
+    font-size:13px;
+    margin-bottom:16px;
+    color:#f0c4c4;
+  }
+
+  /* ===== SUMMARY TABLE ===== */
+  section.summary{padding:56px 24px 0;}
+  .summary-inner{max-width:1180px;margin:0 auto;}
+  .summary-title{font-family:'Fraunces',serif;font-weight:600;font-size:26px;margin-bottom:6px;}
+  .summary-sub{color:var(--muted);font-size:13.5px;margin-bottom:20px;max-width:640px;}
+  table.summary-table{
+    width:100%;border-collapse:collapse;
+    font-size:13.5px;
+    background:var(--bg-card);
+    border-radius:12px;overflow:hidden;
+  }
+  table.summary-table th{
+    text-align:left;font-family:'JetBrains Mono',monospace;font-size:10.5px;
+    text-transform:uppercase;letter-spacing:1px;color:var(--muted);
+    padding:14px 16px;border-bottom:1px solid var(--line);
+  }
+  table.summary-table td{
+    padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top;
+  }
+  table.summary-table tr:last-child td{border-bottom:none;}
+  table.summary-table tr:hover td{background:var(--bg-card-alt);cursor:pointer;}
+  .rank{font-family:'JetBrains Mono',monospace;color:var(--gold);}
+
+  footer{
+    max-width:1180px;margin:56px auto 0;padding:24px 24px 0;
+    font-size:12px;color:var(--muted);
+    border-top:1px solid var(--line);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Martes 14 de julio 2026 · Melipilla &amp; Mallarauco</div>
+    <h1 class="title">Scouting del día:<br><em>7 rivales, 7 diagnósticos.</em></h1>
+    <p class="hero-sub">Cada negocio revisado como una ficha de rival antes del partido: reseñas leídas, fotos auditadas, redes analizadas. Toca cualquier ficha para ver el diagnóstico completo y la frase de apertura.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">7</div><div class="stat-label">Negocios</div></div>
+      <div class="stat"><div class="stat-num" id="stat-alto">—</div><div class="stat-label">Dolores de alto impacto</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Rubros distintos</div></div>
+    </div>
+  </div>
+</header>
+
+<section class="lineup">
+  <div class="lineup-head">
+    <div class="lineup-title">Orden de visita sugerido</div>
+    <div class="lineup-note">Ordenado por probabilidad de conversión, no por horario ni geografía — arma tu ruta real cruzando esto con la zona (Melipilla centro vs. Mallarauco) y el horario de cada ficha.</div>
+  </div>
+  <div class="lineup-strip" id="lineup-strip"></div>
+</section>
+
+<section class="filters">
+  <div class="filters-inner">
+    <span class="filter-label">Filtrar</span>
+    <button class="chip active" data-filter="all">Todos (7)</button>
+    <button class="chip" data-filter="alto">Con dolor Alto</button>
+    <button class="chip" data-filter="Melipilla centro">Melipilla centro</button>
+    <button class="chip" data-filter="Mallarauco">Mallarauco</button>
+    <button class="chip" data-filter="dudoso">Existencia dudosa</button>
+  </div>
+</section>
+
+<section class="grid-section">
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="summary">
+  <div class="summary-inner">
+    <div class="summary-title">Tabla resumen — hoja de ruta rápida</div>
+    <div class="summary-sub">Misma info que las fichas, en una sola vista para llevar en el bolsillo. Haz clic en una fila para abrir esa ficha abajo.</div>
+    <table class="summary-table" id="summary-table">
+      <thead>
+        <tr><th>#</th><th>Nombre</th><th>Zona</th><th>Mejor horario</th><th>Dolor principal</th><th>Servicio a ofrecer primero</th></tr>
+      </thead>
+      <tbody id="summary-tbody"></tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  Investigación comercial preparada para visitas presenciales del martes 14 de julio de 2026. Datos con contradicciones o vacíos entre fuentes están marcados explícitamente — verificar in situ antes de asumir. Este documento es una herramienta de preparación, no un reemplazo del diagnóstico en terreno.
+</footer>
+
+<script>
+const NEGOCIOS = [
+  {
+    id:'quincho', orden:3, nombre:'Restaurant El Quincho', sub:'(El Quincho de los Molles Parrilladas)',
+    rubro:'Restaurante — parrillada / mariscos', zona:'Melipilla centro (inferido)',
+    horario:"No encontrado en ninguna fuente (TripAdvisor indica explícitamente “No hours available”; ficha sin reclamar).",
+    mejorHorario:'12:00–13:00 o 16:00–17:30 (recomendación general, sin horario confirmado — conviene llamar antes o confirmar in situ).',
+    rating:"Datos contradictorios entre fuentes: Google/Sluurpy 4.6/5 (21 o 679 reseñas según snapshot); TripAdvisor 3.7/5 con solo 3 reseñas (puesto #28–30 de 66–72); Carta.menu 3.8/5 sobre 1.469 valoraciones agregadas. No aparece en el top 5 al buscar “restaurante Melipilla”.",
+    positivos:"Ambiente espacioso, limpio y agradable para parrilladas; pastel de choclo y risotto de camarones bien valorados; áreas verdes y juegos para niños.",
+    dolores:[
+      {texto:"Ficha de Google Business con datos contradictorios entre plataformas y sin horario cargado en ningún directorio (TripAdvisor: “No hours available”).", solucion:"Auditoría y optimización de Google Business Profile (horario completo, categoría, fotos, atributos) + reclamar la ficha.", urgencia:"Alto"},
+      {texto:"Reseña negativa detallada sin responder (“La peor carne”, feb 2020: carne dura/seca, costillar 80% hueso, precio percibido como abuso) — sin respuesta del negocio hasta hoy.", solucion:"Gestión activa de reputación online: protocolo de respuesta a reseñas en Google/TripAdvisor.", urgencia:"Alto"},
+      {texto:"Solo 3 reseñas en TripAdvisor, última detectada junio 2024, ficha sin reclamar, fuera del top 5 en búsquedas genéricas del rubro.", solucion:"Estrategia de generación de reseñas (QR en mesa, seguimiento post-visita) y reclamar perfiles.", urgencia:"Medio"},
+      {texto:"No se encontró teléfono público verificable en ninguna fuente; se menciona posibilidad de reservar sin indicar cómo (contradicción).", solucion:"Publicar WhatsApp Business visible + chatbot de WhatsApp para reservas y consultas de carta.", urgencia:"Alto"},
+      {texto:"Instagram (@elquincho.delosmolles) sin actividad verificable; sitio web propio no carga correctamente en las pruebas de acceso.", solucion:"Gestión de redes con calendario de contenido + diagnóstico/optimización técnica de la web.", urgencia:"Medio"},
+      {texto:"Fotos escasas (2–3) y antiguas (2020), sin carta digital ni fotos profesionales recientes.", solucion:"Sesión de fotos profesionales de platos y ambiente + carga sistemática en Google Business y redes.", urgencia:"Medio"},
+    ],
+    dolorPrincipal:"Ficha de Google Business desactualizada/contradictoria, sin horario ni teléfono público verificable, y sin respuesta a reseñas negativas específicas (la de 2020 sigue sin respuesta).",
+    apertura:"Vi que en Google aparecen con 4.6 de rating, pero en TripAdvisor no tienen ni el horario cargado y nadie respondió la reseña de 2020 sobre la carne — ¿les gustaría revisar juntos cómo se ve su perfil desde afuera?",
+    servicioPrimero:"Optimización y estandarización de la ficha de Google Business (horario, teléfono, categoría, fotos) + protocolo de respuesta a reseñas.",
+    nota:"Varios datos (teléfono, horario exacto, seguidores IG, funcionalidad de la web, apps de delivery) no se pudieron confirmar por bloqueos de acceso a contenido dinámico. Se recomienda verificación in situ.",
+    dudoso:false
+  },
+  {
+    id:'lilas', orden:2, nombre:'New Las Lilas', sub:'',
+    rubro:'Restaurante — gastronomía típica/gourmet, con eventos y shows en vivo', zona:'Melipilla centro (inferido)',
+    horario:"Martes a domingo, 12:00–22:00 hrs (cerrado lunes). En noches de eventos especiales extiende horario (cocina hasta 23:30, local hasta 00:00); en fechas puntuales (18–20 sept.) cierra por completo — comunicado solo por Instagram, no en la web.",
+    mejorHorario:'12:30–13:15 hrs, justo al abrir el almuerzo, antes del peak (13:30–15:00) donde las reseñas reportan demoras.',
+    rating:"TripAdvisor 3.9/5 (17 reseñas, puesto #15 de 66). Facebook: 3.204 “me gusta”. Google Maps: no se pudo verificar directamente (no encontrado).",
+    positivos:"Comida de buen sabor, mariscos y ostras bien valorados, papas doradas y ensalada chilena, ambiente familiar y tranquilo, meseros “siempre atentos”, clientes que repiten con la familia.",
+    dolores:[
+      {texto:"Demoras recurrentes en el servicio de almuerzo (reseñas jun. 2024 y dic. 2025: “very slow attention”, “as always the food is slow to arrive”).", solucion:"Sistema de gestión de comandas/pantalla de cocina (KDS) para reducir tiempos de despacho, con aviso proactivo de demoras.", urgencia:"Alto"},
+      {texto:"Ficha de TripAdvisor sin reclamar; no se pudo verificar gestión de Google Business (probablemente tampoco reclamada/gestionada).", solucion:"Reclamar y optimizar Google Business Profile (horarios, fotos, respuesta a reseñas).", urgencia:"Alto"},
+      {texto:"Horarios comunicados de forma inconsistente entre canales (web fija vs. avisos puntuales solo en Instagram para eventos y cierres especiales).", solucion:"Calendario/avisos centralizados en la web que sincronicen cambios de horario y eventos.", urgencia:"Medio"},
+      {texto:"Solo 17 reseñas en TripAdvisor en varios años, muy por debajo de competidores directos de Melipilla con cientos de reseñas.", solucion:"Campaña de solicitud de reseñas post-visita (QR en mesa o WhatsApp automatizado).", urgencia:"Medio"},
+      {texto:"No se encontró presencia en apps de delivery (Uber Eats, PedidosYa, Rappi) en Melipilla.", solucion:"Evaluar alta en delivery o pedidos para llevar vía WhatsApp con catálogo.", urgencia:"Bajo"},
+    ],
+    dolorPrincipal:"Demoras de servicio no gestionadas combinadas con reputación online débil y no reclamada, que perpetúan la queja de lentitud sin capacidad de respuesta del negocio.",
+    apertura:"Vi que en TripAdvisor destacan mucho la comida y la atención, pero también mencionan esperas largas en almuerzo, y noté que su ficha no está reclamada — ¿les gustaría revisar cómo aparecen hoy para nuevos clientes que los buscan en Melipilla?",
+    servicioPrimero:"Gestión y optimización de la ficha de Google Business Profile (reclamar, horarios, fotos, respuesta a reseñas).",
+    nota:"Sitio web propio (newlaslilas.cl) sí funciona, tiene menú con fotos, formulario de reserva y WhatsApp integrado — es el canal de reserva más confiable identificado. Instagram/Facebook no se pudieron auditar en detalle (contenido dinámico).",
+    dudoso:false
+  },
+  {
+    id:'naranjos', orden:4, nombre:'Centro de Eventos Los Naranjos', sub:'(Mallarauco)',
+    rubro:'Centro de eventos / hotel campestre — salón de banquetes y matrimonios', zona:'Mallarauco',
+    horario:"No encontrado horario administrativo día por día; ficha replicada de Google indica “24 horas” (típico de plantilla de alojamiento, dudoso para gestión de eventos).",
+    mejorHorario:'10:00–13:00 hrs (horario de oficina rural), evitando el almuerzo del restobar (13:00–15:00).',
+    rating:"Google 4.4/5 (412 reseñas, vía réplica de ficha); TripAdvisor 4.5/5 (68 reseñas, #1 de 2 alojamientos especiales en Melipilla); Booking 8.9/10 (6 reseñas); Zankyou 4.5/5.",
+    positivos:"Entorno natural (bosque de naranjos), tranquilidad, piscinas, áreas verdes amplias, comida muy rica, amabilidad de los dueños, limpieza (9.2/10 en Booking).",
+    dolores:[
+      {texto:"Web propia (eventosmallarauco.com) no carga contenido accesible/indexable — sitio probablemente desactualizado o con errores técnicos, sin cotizador ni calendario online.", solucion:"Sitio web responsivo con formulario de cotización automática, galería profesional y WhatsApp embebido.", urgencia:"Alto"},
+      {texto:"No existe sistema de consulta de disponibilidad de fechas online; todo depende de contacto manual por WhatsApp/teléfono.", solucion:"Calendario de disponibilidad interactivo + WhatsApp Business con cotización instantánea.", urgencia:"Alto"},
+      {texto:"Categorización mixta en Google como motel/alojamiento en vez de centro de eventos puro, diluyendo el posicionamiento en búsquedas de “centro de eventos Melipilla”.", solucion:"Optimización de ficha de Google Business (categorías y fotos específicas de eventos/banquetes).", urgencia:"Medio"},
+      {texto:"Reseñas negativas puntuales sobre trato del personal/administración (episodio de falta de respeto reportado) que contrastan con la valoración del espacio físico.", solucion:"Gestión activa de reputación online + protocolo de atención al cliente.", urgencia:"Medio"},
+      {texto:"Sin evidencia de actividad reciente verificable en Instagram/Facebook, canal clave para captar parejas planeando matrimonios.", solucion:"Plan de contenido en redes (fotos reales de eventos, testimonios) con enlace a cotización en bio.", urgencia:"Medio"},
+    ],
+    dolorPrincipal:"Ausencia de un canal digital funcional y centralizado (web caída + sin cotizador ni calendario online) para consultar disponibilidad y presupuesto sin depender solo de WhatsApp/teléfono manual.",
+    apertura:"Los Naranjos tiene muy buena reputación en bodas (4.4–4.5 estrellas, cientos de reseñas), pero su sitio web no carga bien y no hay forma de ver disponibilidad de fechas online — eso probablemente les hace perder parejas que cotizan varios lugares el mismo día. ¿Les interesaría ver cómo solucionarlo?",
+    servicioPrimero:"Sitio web funcional con cotizador/calendario de disponibilidad integrado a WhatsApp.",
+    nota:"No confundir con “Hacienda Los Naranjos” en San Bernardo (negocio distinto que aparece en HayMatrimonio.cl). Capacidad reportada en Zankyou: 50–500 invitados, quincho techado hasta 400.",
+    dudoso:false
+  },
+  {
+    id:'condorito', orden:7, nombre:'La Pica de Condorito', sub:'',
+    rubro:'No confirmado (posible picada/restaurante económico)', zona:'Melipilla centro (inferido)',
+    horario:"No encontrado.",
+    mejorHorario:'No encontrado — no se pudo verificar si el negocio está operativo actualmente.',
+    rating:"No encontrado.",
+    positivos:"No encontrado.",
+    dolores:[
+      {texto:"Ausencia total de presencia digital verificable: no se encontró ficha de Google Maps/Business, ni Instagram/Facebook propios, ni web, ni listado en Páginas Amarillas ni en directorios locales (Todo Melipilla).", solucion:"Creación y configuración de ficha de Google Business Profile + presencia mínima en redes.", urgencia:"Alto"},
+      {texto:"No aparece en directorios que sí listan a competidores directos de “picadas” en Melipilla (ej. “La Picá” con ~640–798 reseñas y 4.4/5).", solucion:"Alta en directorios locales relevantes (Google Business, TripAdvisor, Todo Melipilla).", urgencia:"Alto"},
+    ],
+    dolorPrincipal:"Invisibilidad digital total: no es encontrable por búsquedas estándar, mientras competidores directos del mismo rubro y comuna dominan las búsquedas con cientos de reseñas.",
+    apertura:"Estuve buscando 'La Pica de Condorito' en Google y no logré encontrar ni el horario ni la ubicación — ¿cómo están haciendo hoy para que la gente los encuentre y los contacte?",
+    servicioPrimero:"Creación y optimización de ficha de Google Business Profile con datos básicos completos.",
+    nota:"IMPORTANTE: no se pudo confirmar que este negocio exista actualmente en Melipilla bajo ese nombre exacto. Puede ser un negocio muy pequeño/informal sin presencia online, tener otro nombre comercial, o haber cerrado. Se recomienda confirmar el nombre y la dirección con el club antes de destinar tiempo a esta visita mañana.",
+    dudoso:true
+  },
+  {
+    id:'pahuilmo', orden:5, nombre:'Supermercado Pahuilmo', sub:'',
+    rubro:'Supermercado / minimarket rural con tienda de quesos y lácteos (Mallarauco)', zona:'Mallarauco',
+    horario:"Lunes a domingo, 10:00 a 20:00 hrs (sitio oficial pahuilmo.com). Una fuente secundaria (Moovit) menciona cierres especiales no confirmados en fuentes oficiales.",
+    mejorHorario:'10:30–11:30 hrs, apenas abre, antes del movimiento de mediodía.',
+    rating:"No encontrado (no se pudo acceder a la ficha real de Google Maps). El negocio aparece indexado bajo nombres distintos en agregadores de terceros, sin rating consolidado.",
+    positivos:"Según fragmentos de reseñas de terceros (no verificados en la fuente original): “bueno y barato”, empanadas de queso al horno destacadas, funciona también como minimarket con estacionamiento y venta de frutas y verduras.",
+    dolores:[
+      {texto:"Identidad digital fragmentada: el mismo local aparece con al menos tres nombres distintos en la web (Cafetería Pahuilmo, Supermercado Pahuilmo, Quesos/Lácteos Pahuilmo), dificultando encontrarlo con confianza en Google Maps.", solucion:"Auditoría y unificación de la ficha de Google Business Profile (nombre, categoría, horarios, fotos) + solicitud activa de reseñas.", urgencia:"Alto"},
+      {texto:"No hay canal de pedidos/delivery local claro para el supermercado físico; la tienda online del sitio está orientada a venta nacional de quesos, no a compra rápida local.", solucion:"Botón de pedidos por WhatsApp Business para compras rápidas locales (retiro o despacho cercano).", urgencia:"Medio"},
+      {texto:"Sin presencia confirmada en apps de delivery de supermercado (Cornershop/Uber, Rappi, PedidosYa Market) para la tienda física de Melipilla/Mallarauco.", solucion:"Evaluar convenio con Cornershop/Uber o PedidosYa Market.", urgencia:"Medio"},
+      {texto:"No se pudo verificar si el negocio responde a reseñas ni el contenido de fotos de Google — señal de gestión digital pasiva de la ficha.", solucion:"Gestión activa de reseñas + carga de fotos actualizadas del local y catálogo de precios.", urgencia:"Bajo-Medio"},
+    ],
+    dolorPrincipal:"Identidad digital fragmentada y ficha de Google Maps poco clara/gestionada, sumado a la ausencia de un canal de pedidos/delivery moderno para la tienda física.",
+    apertura:"Vi que Pahuilmo tiene tres nombres distintos dando vueltas en internet (Cafetería, Supermercado, Quesos Pahuilmo) y ninguna reseña de Google visible fácilmente — eso hace que mucha gente que busca 'supermercado cerca de Mallarauco' no los encuentre. ¿Les interesaría que ordenemos esa ficha y sumemos un canal de pedidos por WhatsApp?",
+    servicioPrimero:"Optimización y unificación de la ficha de Google Business Profile + gestión activa de reseñas.",
+    nota:"Instagram @lacteos_pahuilmo (~16 mil seguidores, marca de lácteos, no exclusiva del supermercado) muestra actividad reciente. Teléfonos inconsistentes entre fuentes — confirmar el vigente antes de contactar.",
+    dudoso:false
+  },
+  {
+    id:'cabana', orden:6, nombre:'La Cabaña', sub:'',
+    rubro:'Restaurante — comida chilena, quesos de la Ruta del Queso de Mallarauco y sándwiches de pan amasado', zona:'Mallarauco',
+    horario:"Todos los días, 10:00 a 19:30 hrs (TripAdvisor). No se pudo confirmar cruzado en Google Maps.",
+    mejorHorario:'12:30–14:30 hrs (almuerzo) o 16:00–18:00 hrs si se busca conversar con calma con el encargado.',
+    rating:"TripAdvisor: 0 reseñas (“No reviews yet”), posición muy baja y variable en el ranking de Melipilla. No encontrado en Google Maps.",
+    positivos:"No encontrado (no hay reseñas de texto disponibles). La propia ficha del negocio destaca quesos con medalla de oro de Mallarauco y sándwiches de pan amasado.",
+    dolores:[
+      {texto:"Ausencia casi total de reseñas y rating visible en las plataformas revisadas (TripAdvisor: 0 reseñas; Google: no confirmado).", solucion:"Generación de reseñas (QR en mesas/caja, seguimiento post-venta) + reclamar/optimizar Google Business Profile.", urgencia:"Alto"},
+      {texto:"No se encontró presencia confirmada en Instagram ni Facebook propios del restaurante.", solucion:"Creación y activación de cuenta Instagram/Facebook Business con fotos del local, platos y quesos, más WhatsApp.", urgencia:"Alto"},
+      {texto:"No hay sitio web propio ni sistema de reservas online; único canal verificado es teléfono fijo y correo, sin claridad sobre WhatsApp.", solucion:"Canal de reservas/consultas vía WhatsApp Business y, si el volumen lo justifica, landing page simple.", urgencia:"Medio"},
+      {texto:"Muy pocas fotos disponibles (4 en TripAdvisor), presencia visual pobre y desactualizada.", solucion:"Sesión fotográfica básica del local, platos y quesos + carga en Google Business e Instagram.", urgencia:"Medio"},
+      {texto:"No hay información clara sobre cómo reservar en una zona rural, lo que puede hacer que turistas desistan sin confirmar antes.", solucion:"Publicar claramente el proceso de reserva (WhatsApp) en ficha y redes.", urgencia:"Medio"},
+    ],
+    dolorPrincipal:"Presencia digital prácticamente inexistente (sin reseñas, sin redes confirmadas, sin web), generando invisibilidad y desconfianza frente a un cliente que investiga antes de viajar a una zona rural.",
+    apertura:"'La Cabaña' tiene una propuesta muy linda con los quesos de Mallarauco, pero busqué el local en Google y casi no aparece con reseñas ni fotos actualizadas — ¿les interesaría conversar sobre cómo hacer que la gente los encuentre y confíe antes de ir?",
+    servicioPrimero:"Optimización y activación de la ficha de Google Business Profile (fotos, horario, categoría, WhatsApp) + campaña de generación de reseñas.",
+    nota:"Existen otros negocios homónimos en la zona (cabaña de arriendo turístico, productora de quesos “Quesos La Cabaña”) — confirmar identidad exacta antes de la visita. Teléfono: +56 2 2831 2574.",
+    dudoso:false
+  },
+  {
+    id:'dominga', orden:1, nombre:'Terraza Doña Dominga', sub:'(Mallarauco)',
+    rubro:'Restaurante familiar de comida chilena, con terraza y eventos en vivo', zona:'Mallarauco',
+    horario:"No publicado completo. Único dato visible en Google: “Abre a las 12 p.m. del martes” (reportado por usuarios, no por el dueño; ficha sin reclamar).",
+    mejorHorario:'13:00–14:30 hrs, tras la apertura (12:00). Los martes no hay eventos en vivo programados, por lo que el ambiente debería ser más calmo.',
+    rating:"Google Maps 4.8★ (65 opiniones). Facebook: 6.800 seguidores. Instagram @domingamallarauco_piri: 5.521 seguidores, 1.038 publicaciones.",
+    positivos:"Servicio amable y cordial, comida “demasiado rica”, buena cantidad, precio asequible ($5.000–$10.000 por persona), buen lugar para pasar un rato agradable. Destacan empanadas, pastel de choclo, filetitos de pollo.",
+    dolores:[
+      {texto:"Ficha de Google Business sin reclamar (“Reclamar este negocio” visible) y horario semanal incompleto/no confirmado por el dueño.", solucion:"Reclamar y optimizar Google Business (horarios completos, fotos de carta, categoría, respuesta a reseñas).", urgencia:"Alto"},
+      {texto:"No existe sitio web propio; el dominio similar (donadominga.cl) pertenece a una distribuidora distinta en Magallanes, generando riesgo de confusión de marca.", solucion:"Landing page simple con menú, ubicación, horarios, botón de reserva/WhatsApp y calendario de eventos en vivo.", urgencia:"Medio"},
+      {texto:"No hay sistema de reservas online ni de pedidos; único canal es un teléfono/WhatsApp personal sin automatización.", solucion:"Botón de reserva/WhatsApp Business con catálogo y confirmación automática.", urgencia:"Medio"},
+      {texto:"No se encontró presencia en apps de delivery (PedidosYa, Uber Eats, Rappi).", solucion:"Evaluar alta en delivery o pedidos para llevar coordinados por WhatsApp con menú fijo.", urgencia:"Bajo"},
+    ],
+    dolorPrincipal:"Ficha de Google Business sin reclamar y sin horario completo, combinada con ausencia total de sitio web propio — fuerte tracción en redes (6.800 y 5.500 seguidores) pero ningún canal digital propio y controlado.",
+    apertura:"Doña Dominga tiene tremenda fama en Mallarauco — 4.8 estrellas y miles de seguidores — pero en Google todavía no tienen reclamado el negocio ni el horario completo, y existe otra empresa con el mismo nombre que podría confundir a quien los busque online. ¿Les interesaría que los ayude a ordenar eso?",
+    servicioPrimero:"Reclamar y optimizar la ficha de Google Business (horarios completos, fotos de carta, respuesta a reseñas) — gratuito y de alto impacto inmediato.",
+    nota:"Teléfono/WhatsApp: +56 9 7413 1205 (mismo en Google, Facebook e Instagram). Solo se pudo leer una muestra de 3 de las 65 reseñas de Google.",
+    dudoso:false
+  },
+];
+
+function urgenciaClass(u){
+  if(u.toLowerCase().includes('alto')) return 'alto';
+  if(u.toLowerCase().includes('bajo') && !u.toLowerCase().includes('medio')) return 'bajo';
+  return 'medio'; // covers "Medio" and "Bajo-Medio"
+}
+function dotClass(u){
+  const c = urgenciaClass(u);
+  return c==='alto' ? 'dot-alto' : c==='medio' ? 'dot-medio' : 'dot-bajo';
+}
+function cardColor(u){
+  const c = urgenciaClass(u);
+  return c==='alto' ? 'var(--red-card)' : c==='medio' ? 'var(--yellow-card)' : 'var(--green-card)';
+}
+function maxUrgencia(dolores){
+  if(dolores.some(d=>urgenciaClass(d.urgencia)==='alto')) return 'Alto';
+  if(dolores.some(d=>urgenciaClass(d.urgencia)==='medio')) return 'Medio';
+  return 'Bajo';
+}
+
+const ordered = [...NEGOCIOS].sort((a,b)=>a.orden-b.orden);
+
+// stat: count total "alto" dolores across all negocios
+const totalAlto = NEGOCIOS.reduce((sum,n)=>sum + n.dolores.filter(d=>urgenciaClass(d.urgencia)==='alto').length, 0);
+document.getElementById('stat-alto').textContent = totalAlto;
+
+// ===== LINEUP STRIP =====
+const lineupEl = document.getElementById('lineup-strip');
+ordered.forEach(n=>{
+  const div = document.createElement('div');
+  div.className = 'lineup-card';
+  div.onclick = () => jumpTo(n.id);
+  div.innerHTML = `
+    <div class="card-dot ${dotClass(maxUrgencia(n.dolores))}"></div>
+    <div class="order">#${n.orden} · ${n.zona.replace(' (inferido)','')}</div>
+    <div class="lname">${n.nombre}</div>
+    <div class="ltime">${n.mejorHorario.split(/[,.(]/)[0].trim()}</div>
+  `;
+  lineupEl.appendChild(div);
+});
+
+// ===== GRID OF FICHAS =====
+const gridEl = document.getElementById('grid');
+function renderGrid(filter){
+  gridEl.innerHTML = '';
+  ordered.forEach(n=>{
+    if(filter==='alto' && maxUrgencia(n.dolores)!=='Alto') return;
+    if(filter==='Melipilla centro' && !n.zona.includes('Melipilla')) return;
+    if(filter==='Mallarauco' && n.zona!=='Mallarauco') return;
+    if(filter==='dudoso' && !n.dudoso) return;
+
+    const el = document.createElement('div');
+    el.className = 'ficha';
+    el.id = 'ficha-'+n.id;
+
+    const dolorPreview = n.dolorPrincipal;
+
+    let dolorHtml = '';
+    n.dolores.forEach(d=>{
+      dolorHtml += `
+        <div class="dolor-item">
+          <div class="dolor-head">
+            <div class="dolor-card-icon" style="background:${cardColor(d.urgencia)}"></div>
+            <div class="dolor-text">${d.texto}</div>
+            <div class="urgencia-label">${d.urgencia}</div>
+          </div>
+          <div class="solucion-row"><b>Solución</b><span>${d.solucion}</span></div>
+        </div>`;
+    });
+
+    el.innerHTML = `
+      <div class="ficha-head" onclick="toggleFicha('${n.id}')">
+        <div class="ficha-head-left">
+          <div class="ficha-order">
+            <span>#${n.orden} de 7</span>
+            <span class="tag">${n.rubro.split('—')[0].trim()}</span>
+            <span class="tag zone">${n.zona}</span>
+          </div>
+          <div class="ficha-name">${n.nombre}</div>
+          <div class="ficha-rubro">${n.sub || n.rubro}</div>
+        </div>
+        <div class="ficha-meta-right">
+          <div class="ficha-time">${n.mejorHorario.split('(')[0].trim()}</div>
+          <span class="chevron">▾</span>
+        </div>
+      </div>
+      <div class="ficha-pain-preview"><b>Dolor principal:</b> ${dolorPreview}</div>
+      <div class="ficha-body">
+        <div class="ficha-body-inner">
+          ${n.dudoso ? `<div class="warning-banner">⚠ Existencia del negocio no confirmada bajo ese nombre exacto en Melipilla. Confirmar antes de destinar tiempo a esta visita.</div>` : ''}
+
+          <div class="fb-block">
+            <div class="fb-label">Horario de atención</div>
+            <div class="fb-text">${n.horario}</div>
+          </div>
+
+          <div class="fb-block">
+            <div class="fb-label">Rating / reseñas</div>
+            <div class="fb-text">${n.rating}</div>
+          </div>
+
+          <div class="fb-block">
+            <div class="fb-label">Qué destacan positivamente los clientes</div>
+            <div class="fb-positive">${n.positivos}</div>
+          </div>
+
+          <div class="fb-block">
+            <div class="fb-label">Dolores detectados y solución propuesta</div>
+            ${dolorHtml}
+          </div>
+
+          <div class="fb-block">
+            <div class="fb-label">Frase de apertura sugerida</div>
+            <div class="quote-box">“${n.apertura}”</div>
+          </div>
+
+          <div class="fb-block">
+            <div class="fb-label">Servicio a ofrecer primero</div>
+            <div class="servicio-box"><b>→</b> ${n.servicioPrimero}</div>
+          </div>
+
+          <div class="nota-box"><b>Nota:</b> ${n.nota}</div>
+        </div>
+      </div>
+    `;
+    gridEl.appendChild(el);
+  });
+}
+renderGrid('all');
+
+function toggleFicha(id){
+  const el = document.getElementById('ficha-'+id);
+  if(!el) return;
+  el.classList.toggle('expanded');
+}
+function jumpTo(id){
+  const currentFilter = document.querySelector('.chip.active').dataset.filter;
+  if(currentFilter !== 'all'){
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    document.querySelector('.chip[data-filter="all"]').classList.add('active');
+    renderGrid('all');
+  }
+  const el = document.getElementById('ficha-'+id);
+  if(el){
+    el.classList.add('expanded');
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+// ===== FILTERS =====
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    renderGrid(chip.dataset.filter);
+  });
+});
+
+// ===== SUMMARY TABLE =====
+const tbody = document.getElementById('summary-tbody');
+ordered.forEach(n=>{
+  const tr = document.createElement('tr');
+  tr.onclick = () => jumpTo(n.id);
+  tr.innerHTML = `
+    <td class="rank">#${n.orden}</td>
+    <td><b>${n.nombre}</b></td>
+    <td>${n.zona}</td>
+    <td>${n.mejorHorario.split('(')[0].trim()}</td>
+    <td>${n.dolorPrincipal}</td>
+    <td>${n.servicioPrimero}</td>
+  `;
+  tbody.appendChild(tr);
+});
+</script>
+</body>
+</html>

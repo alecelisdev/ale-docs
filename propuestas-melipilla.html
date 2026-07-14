@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuestas — Melipilla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2eee4;
+    --paper-alt:#eae4d3;
+    --ink:#25231b;
+    --muted:#726b5b;
+    --accent:#3f5c46;
+    --accent-soft:rgba(63,92,70,.09);
+    --gold:#b3812f;
+    --line:#d9d0bb;
+    --white:#faf8f2;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--paper-alt);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+    padding:0 0 60px;
+  }
+  .topbar{
+    background:var(--ink);
+    color:var(--white);
+    padding:18px 24px;
+  }
+  .topbar-inner{
+    max-width:920px;margin:0 auto;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  }
+  .topbar-title{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#d9d0bb;
+  }
+  .topbar-sub{font-size:12px;color:#a39b86;margin-top:2px;}
+
+  .selector{
+    max-width:920px;margin:24px auto 0;padding:0 24px;
+    display:flex;gap:8px;flex-wrap:wrap;
+  }
+  .sel-chip{
+    font-family:'Inter',sans-serif;font-size:13px;font-weight:500;
+    padding:8px 15px;border-radius:8px;border:1px solid var(--line);
+    background:var(--paper);color:var(--muted);cursor:pointer;transition:.15s;
+  }
+  .sel-chip:hover{border-color:var(--accent);color:var(--ink);}
+  .sel-chip.active{background:var(--accent);color:var(--white);border-color:var(--accent);}
+
+  .doc-wrap{max-width:920px;margin:20px auto 0;padding:0 24px;}
+
+  .doc{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:0 12px 30px -14px rgba(37,35,27,.25);
+    overflow:hidden;
+  }
+
+  .draft-banner{
+    background:var(--accent-soft);
+    border-bottom:1px solid var(--line);
+    padding:11px 40px;
+    font-size:12.5px;color:var(--accent);
+    display:flex;align-items:center;gap:8px;
+  }
+  .draft-banner::before{content:'●';font-size:8px;}
+
+  .doc-header{
+    padding:38px 40px 28px;
+    border-bottom:2px solid var(--ink);
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  }
+  .doc-header-left h1{
+    font-family:'Lora',serif;font-weight:600;font-size:26px;letter-spacing:-.3px;
+  }
+  .doc-header-left .for{
+    margin-top:8px;font-size:14.5px;color:var(--muted);
+  }
+  .doc-header-left .for b{color:var(--ink);}
+  .doc-header-right{
+    text-align:right;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--muted);
+    flex-shrink:0;
+  }
+  .doc-header-right .folio{color:var(--ink);font-weight:600;margin-bottom:4px;}
+
+  .doc-section{
+    padding:26px 40px;
+    border-bottom:1px solid var(--line);
+  }
+  .doc-section:last-of-type{border-bottom:none;}
+  .sec-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;
+    letter-spacing:1.5px;color:var(--accent);margin-bottom:14px;
+  }
+
+  .diag-list{list-style:none;}
+  .diag-list li{
+    position:relative;padding-left:20px;margin-bottom:10px;font-size:14.5px;
+  }
+  .diag-list li::before{
+    content:'—';position:absolute;left:0;color:var(--gold);
+  }
+
+  .fase{
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:14px;
+  }
+  .fase.principal{border-color:var(--accent);background:var(--accent-soft);}
+  .fase-tag{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;
+    letter-spacing:1px;color:var(--accent);margin-bottom:6px;display:block;
+  }
+  .fase-title{font-family:'Lora',serif;font-weight:600;font-size:16.5px;margin-bottom:6px;}
+  .fase-desc{font-size:14px;color:var(--ink);opacity:.85;}
+
+  table.inv-table{width:100%;border-collapse:collapse;font-size:14px;}
+  table.inv-table td{padding:14px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+  table.inv-table tr:last-child td{border-bottom:none;}
+  .inv-concept{font-weight:600;width:38%;}
+  .inv-price{
+    font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--gold);
+    font-size:16px;white-space:nowrap;text-align:right;width:22%;
+  }
+  .inv-note{font-size:12.5px;color:var(--muted);}
+
+  .includes-list{margin-top:8px;font-size:13px;color:var(--muted);}
+  .includes-list span{display:block;margin-bottom:3px;}
+  .includes-list span::before{content:'✓ ';color:var(--accent);}
+
+  .meta-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:20px;
+  }
+  @media(max-width:560px){.meta-grid{grid-template-columns:1fr;}}
+  .meta-item .sec-label{margin-bottom:6px;}
+  .meta-item p{font-size:14px;}
+
+  .validity{
+    font-size:12.5px;color:var(--muted);font-style:italic;
+  }
+
+  .doc-footer{
+    padding:26px 40px 34px;
+    display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;
+  }
+  .contact-line{font-size:13px;color:var(--muted);}
+  .contact-line b{color:var(--ink);}
+  .print-btn{
+    font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;
+    background:var(--ink);color:var(--white);border:none;
+    padding:11px 20px;border-radius:6px;cursor:pointer;
+  }
+  .print-btn:hover{background:var(--accent);}
+
+  .warning-note{
+    background:#f4e2d8;border:1px solid #d9a97e;color:#7a4620;
+    border-radius:6px;padding:10px 14px;font-size:12.5px;margin-bottom:16px;
+  }
+
+  @media print{
+    body{background:#fff;padding:0;}
+    .topbar,.selector,.draft-banner,.print-btn{display:none !important;}
+    .doc-wrap{margin:0;padding:0;max-width:none;}
+    .doc{box-shadow:none;border:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <div class="topbar-title">Propuestas comerciales · borrador</div>
+      <div class="topbar-sub">Preparadas para visitas del martes 14 de julio · Melipilla y Mallarauco</div>
+    </div>
+  </div>
+</div>
+
+<div class="selector" id="selector"></div>
+
+<div class="doc-wrap">
+  <div class="doc" id="doc"></div>
+</div>
+
+<script>
+const PROPUESTAS = [
+  {
+    id:'dominga', nombre:'Terraza Doña Dominga', rubro:'Restaurante familiar',
+    diagnostico:[
+      "Su ficha de Google aparece sin reclamar y con horario incompleto (solo se ve “abre a las 12 p.m. del martes”).",
+      "No existe sitio web propio — el dominio parecido pertenece a otra empresa, lo que puede confundir a quien los busque.",
+      "Tienen muy buena base (4.8★, 65 reseñas, +6.800 seguidores en redes) que hoy no está aprovechada en un canal propio."
+    ],
+    fase1:{titulo:"Reclamar y optimizar Google Business", desc:"Verificación de la ficha, carga de horario completo, fotos de la carta y del local, y protocolo simple de respuesta a reseñas."},
+    fase2:{titulo:"Landing page simple (opcional)", desc:"Página con menú, ubicación, horario y botón directo de WhatsApp para reservas — evita la confusión con el otro dominio."},
+    setup:45000, setupNota:"Fase 1. Si se agrega landing, +$90.000 adicional.",
+    mensual:25000,
+    plazo:"3–5 días hábiles (Fase 1) · 5–7 días adicionales si se suma landing.",
+    dudoso:false
+  },
+  {
+    id:'lilas', nombre:'New Las Lilas', rubro:'Restaurante gastronómico',
+    diagnostico:[
+      "Su ficha de Google/TripAdvisor no está reclamada, a pesar de tener buena valoración en la comida.",
+      "Varias reseñas mencionan demoras en el servicio de almuerzo, sin respuesta pública del negocio.",
+      "Los horarios de eventos especiales solo se avisan por Instagram, generando confusión con la web."
+    ],
+    fase1:{titulo:"Reclamar y optimizar Google Business", desc:"Verificación de la ficha, horarios claros (incluyendo eventos especiales), fotos actualizadas y respuesta a reseñas existentes."},
+    fase2:{titulo:"Calendario de avisos centralizado (opcional)", desc:"Sincroniza cambios de horario y eventos entre la web y las redes, para que no dependa solo de Instagram."},
+    setup:50000, setupNota:"Fase 1. Incluye auditoría de horarios entre canales.",
+    mensual:25000,
+    plazo:"4–6 días hábiles.",
+    dudoso:false
+  },
+  {
+    id:'naranjos', nombre:'Centro de Eventos Los Naranjos', rubro:'Centro de eventos / matrimonios',
+    diagnostico:[
+      "Su sitio web actual no carga correctamente y no permite cotizar ni ver disponibilidad de fechas online.",
+      "Toda consulta depende hoy de contacto manual por WhatsApp o teléfono, lo que puede perder parejas que cotizan varios lugares el mismo día.",
+      "La categoría en Google los muestra como alojamiento, no como centro de eventos, diluyendo su posicionamiento en búsquedas."
+    ],
+    fase1:{titulo:"Sitio web con cotizador y calendario de disponibilidad", desc:"Sitio responsivo con formulario de cotización automática, galería de eventos reales y WhatsApp integrado, conectado a un calendario de fechas disponibles."},
+    fase2:{titulo:"Plan de contenido para redes (opcional)", desc:"Fotos reales de eventos y testimonios, con enlace directo a cotización en la biografía."},
+    setup:140000, setupNota:"Incluye cotizador + calendario integrado a WhatsApp.",
+    mensual:30000,
+    plazo:"10–15 días hábiles.",
+    dudoso:false
+  },
+  {
+    id:'condorito', nombre:'La Pica de Condorito', rubro:'Restaurante económico (por confirmar)',
+    diagnostico:[
+      "No se encontró ninguna presencia digital verificable: sin ficha de Google, sin redes propias, sin web.",
+      "Competidores directos del mismo tipo de negocio en Melipilla dominan las búsquedas con cientos de reseñas."
+    ],
+    fase1:{titulo:"Creación de ficha de Google Business", desc:"Alta y configuración completa: dirección, horario, categoría, fotos y datos de contacto básicos."},
+    fase2:{titulo:"Presencia mínima en redes (opcional)", desc:"Creación de cuenta de Instagram/Facebook con contenido inicial y WhatsApp visible."},
+    setup:40000, setupNota:"Precio de entrada para ficha básica desde cero.",
+    mensual:20000,
+    plazo:"3–5 días hábiles.",
+    dudoso:true
+  },
+  {
+    id:'pahuilmo', nombre:'Supermercado Pahuilmo', rubro:'Supermercado / minimarket rural',
+    diagnostico:[
+      "El mismo local aparece con al menos tres nombres distintos en internet, dificultando encontrarlo con confianza.",
+      "No existe un canal de pedidos rápidos para la tienda física — la tienda online actual es solo para venta nacional de quesos.",
+      "No hay evidencia de gestión activa de reseñas ni fotos actualizadas del local."
+    ],
+    fase1:{titulo:"Unificación y optimización de Google Business", desc:"Consolidar el negocio bajo un solo nombre y ficha, con horario, categoría y fotos correctas, más solicitud activa de reseñas."},
+    fase2:{titulo:"Botón de pedidos por WhatsApp (opcional)", desc:"Canal simple de pedidos para compras rápidas locales (retiro o despacho cercano)."},
+    setup:55000, setupNota:"Incluye trabajo de unificación de identidad digital.",
+    mensual:25000,
+    plazo:"5–7 días hábiles.",
+    dudoso:false
+  },
+  {
+    id:'cabana', nombre:'La Cabaña', rubro:'Restaurante — comida chilena y quesos',
+    diagnostico:[
+      "Prácticamente no tiene presencia digital: sin reseñas visibles, sin redes propias confirmadas, sin sitio web.",
+      "Muy pocas fotos disponibles del local, los platos y los quesos premiados.",
+      "Un cliente que investiga antes de viajar a la zona rural no encuentra información que le dé confianza."
+    ],
+    fase1:{titulo:"Activación de Google Business + creación de redes", desc:"Ficha completa con fotos profesionales del local, platos y quesos, más cuenta de Instagram/Facebook con contenido inicial y WhatsApp visible."},
+    fase2:{titulo:"Campaña de generación de reseñas (opcional)", desc:"Seguimiento post-venta y QR en mesa/caja para acumular reseñas reales."},
+    setup:60000, setupNota:"Incluye sesión de fotos básica y creación de redes.",
+    mensual:25000,
+    plazo:"6–8 días hábiles.",
+    dudoso:false
+  },
+  {
+    id:'quincho', nombre:'Restaurant El Quincho', rubro:'Restaurante — parrillada / mariscos',
+    diagnostico:[
+      "Su ficha de Google muestra datos contradictorios entre plataformas y no tiene horario cargado en ningún directorio.",
+      "Existe una reseña negativa detallada sin respuesta del negocio hasta hoy.",
+      "No se encontró un teléfono o WhatsApp público claro para reservar."
+    ],
+    fase1:{titulo:"Auditoría y optimización de Google Business", desc:"Estandarizar horario, teléfono, categoría y fotos entre plataformas, más protocolo de respuesta a reseñas existentes."},
+    fase2:{titulo:"WhatsApp Business visible (opcional)", desc:"Publicar un canal de WhatsApp claro para reservas y consultas de carta."},
+    setup:55000, setupNota:"Incluye estandarización entre Google, TripAdvisor y redes.",
+    mensual:25000,
+    plazo:"5–7 días hábiles.",
+    dudoso:false
+  },
+];
+
+function money(n){ return '$' + n.toLocaleString('es-CL'); }
+
+const today = new Date();
+const fechaStr = today.toLocaleDateString('es-CL', {day:'2-digit', month:'long', year:'numeric'});
+
+let current = PROPUESTAS[0].id;
+
+function render(){
+  // selector
+  const sel = document.getElementById('selector');
+  sel.innerHTML = '';
+  PROPUESTAS.forEach((p,i)=>{
+    const chip = document.createElement('button');
+    chip.className = 'sel-chip' + (p.id===current ? ' active' : '');
+    chip.textContent = p.nombre;
+    chip.onclick = () => { current = p.id; render(); };
+    sel.appendChild(chip);
+  });
+
+  const p = PROPUESTAS.find(x=>x.id===current);
+  const doc = document.getElementById('doc');
+  const folio = 'PROP-' + (PROPUESTAS.indexOf(p)+1).toString().padStart(3,'0');
+
+  doc.innerHTML = `
+    <div class="draft-banner">Documento referencial de trabajo — no constituye una cotización formal ni vinculante hasta acordar alcance final con el cliente.</div>
+    <div class="doc-header">
+      <div class="doc-header-left">
+        <h1>Propuesta de Servicios Digitales</h1>
+        <div class="for">Preparada para <b>${p.nombre}</b> — ${p.rubro}</div>
+      </div>
+      <div class="doc-header-right">
+        <div class="folio">${folio}</div>
+        <div>${fechaStr}</div>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <div class="sec-label">Diagnóstico</div>
+      ${p.dudoso ? `<div class="warning-note">⚠ No se pudo confirmar la existencia del negocio bajo este nombre exacto en Melipilla — validar antes de presentar esta propuesta formalmente.</div>` : ''}
+      <ul class="diag-list">
+        ${p.diagnostico.map(d=>`<li>${d}</li>`).join('')}
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <div class="sec-label">Qué proponemos</div>
+      <div class="fase principal">
+        <span class="fase-tag">Fase 1 — recomendada para empezar</span>
+        <div class="fase-title">${p.fase1.titulo}</div>
+        <div class="fase-desc">${p.fase1.desc}</div>
+      </div>
+      <div class="fase">
+        <span class="fase-tag">Fase 2 — opcional, a evaluar después</span>
+        <div class="fase-title">${p.fase2.titulo}</div>
+        <div class="fase-desc">${p.fase2.desc}</div>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <div class="sec-label">Inversión</div>
+      <table class="inv-table">
+        <tr>
+          <td class="inv-concept">Desarrollo (pago único)</td>
+          <td class="inv-note">${p.setupNota}</td>
+          <td class="inv-price">${money(p.setup)}</td>
+        </tr>
+        <tr>
+          <td class="inv-concept">Mensualidad</td>
+          <td class="inv-note">Soporte, mantención y costos de servicios de terceros incluidos.</td>
+          <td class="inv-price">${money(p.mensual)}/mes</td>
+        </tr>
+      </table>
+      <div class="includes-list">
+        <span>Corrección de errores sin costo durante los primeros 15 días tras la entrega</span>
+        <span>Ajustes menores incluidos en la mensualidad (texto, horario, precios, fotos)</span>
+        <span>Soporte directo por WhatsApp ante cualquier duda o falla</span>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <div class="meta-grid">
+        <div class="meta-item">
+          <div class="sec-label">Plazo estimado</div>
+          <p>${p.plazo}</p>
+        </div>
+        <div class="meta-item">
+          <div class="sec-label">Condiciones de pago</div>
+          <p>50% para iniciar el trabajo, 50% restante contra entrega.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <p class="validity">Propuesta referencial válida por 15 días desde la fecha indicada. El alcance final y el precio se confirman por escrito antes de iniciar cualquier trabajo.</p>
+    </div>
+
+    <div class="doc-footer">
+      <div class="contact-line">Preparado por: <b>[Tu nombre / agencia]</b> · [Tu teléfono/WhatsApp]</div>
+      <button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+    </div>
+  `;
+}
+
+render();
+</script>
+</body>
+</html>
