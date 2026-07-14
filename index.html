@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vestuario — Documentación</title>
+<title>Documentación</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -37,13 +37,6 @@
     margin-bottom:8px;letter-spacing:-.01em;
   }
   .sub{color:var(--muted);font-size:14.5px;max-width:520px;margin-bottom:36px;}
-  .config-note{
-    background:rgba(211,169,77,.08);border:1px solid rgba(211,169,77,.3);
-    border-radius:10px;padding:12px 16px;font-size:12.5px;color:var(--muted);
-    margin-bottom:32px;display:none;
-  }
-  .config-note.show{display:block;}
-  .config-note code{color:var(--gold);font-family:'JetBrains Mono',monospace;}
   #status{color:var(--muted);font-size:13.5px;font-family:'JetBrains Mono',monospace;}
   #list{list-style:none;margin-top:8px;}
   #list li{
@@ -73,24 +66,21 @@
   <h1>Documentación</h1>
   <p class="sub">Cada documento generado queda listado acá automáticamente. Sube un HTML nuevo al repo y aparece solo — este índice nunca se edita a mano.</p>
 
-
-
   <p id="status">Cargando documentos…</p>
   <ul id="list"></ul>
 </div>
 
-<footer>index.html · lee el contenido del repo en vivo vía GitHub API</footer>
+<footer>index.html · lee el contenido del repo en vivo vía jsDelivr</footer>
 
 <script>
-  // ── Configura esto una sola vez con los datos de tu repo ──
+  // ── Datos del repo ──
   const OWNER  = 'alecelisdev';
   const REPO   = 'ale-docs';
   const BRANCH = 'main'; // cambia a 'master' si tu repo usa esa rama por defecto
-  // ───────────────────────────────────────────────────────────
+  // ─────────────────────
 
   const statusEl = document.getElementById('status');
   const listEl = document.getElementById('list');
-  const configNote = document.getElementById('configNote');
 
   function prettifyName(filename){
     return filename
@@ -105,16 +95,9 @@
   }
 
   async function loadDocs(){
-    if (OWNER === 'alecelisdev' || REPO === 'ale-docs'){
-      configNote.classList.add('show');
-      statusEl.textContent = 'Configura OWNER y REPO arriba en el código para activar el listado.';
-      return;
-    }
-
     try {
       // jsDelivr espeja repos públicos de GitHub con límites de consulta
-      // mucho más generosos que la API directa de GitHub — pensado para
-      // ser llamado desde el navegador de cada visitante, no una vez desde tu servidor.
+      // mucho más generosos que la API directa de GitHub.
       const res = await fetch(`https://data.jsdelivr.com/v1/package/gh/${OWNER}/${REPO}@${BRANCH}/flat`);
       if (!res.ok) throw new Error('jsDelivr respondió ' + res.status);
       const data = await res.json();
