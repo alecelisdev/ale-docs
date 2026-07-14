@@ -69,13 +69,11 @@
 </head>
 <body>
 <div class="wrap">
-  <div class="eyebrow">Documentación del club &amp; la agencia</div>
-  <h1>Vestuario</h1>
+  <div class="eyebrow">Documentación de mis proyectos</div>
+  <h1>Documentación</h1>
   <p class="sub">Cada documento generado queda listado acá automáticamente. Sube un HTML nuevo al repo y aparece solo — este índice nunca se edita a mano.</p>
 
-  <div class="config-note" id="configNote">
-    Falta configurar <code>OWNER</code> y <code>REPO</code> en el script al final de este archivo.
-  </div>
+
 
   <p id="status">Cargando documentos…</p>
   <ul id="list"></ul>
@@ -85,8 +83,9 @@
 
 <script>
   // ── Configura esto una sola vez con los datos de tu repo ──
-  const OWNER = 'alecelisdev';
-  const REPO  = 'ale-docs';
+  const OWNER  = 'alecelisdev';
+  const REPO   = 'ale-docs';
+  const BRANCH = 'main'; // cambia a 'master' si tu repo usa esa rama por defecto
   // ───────────────────────────────────────────────────────────
 
   const statusEl = document.getElementById('status');
@@ -106,22 +105,29 @@
   }
 
   async function loadDocs(){
-    if (OWNER === 'TU_USUARIO_GITHUB' || REPO === 'TU_REPO'){
+    if (OWNER === 'alecelisdev' || REPO === 'ale-docs'){
       configNote.classList.add('show');
       statusEl.textContent = 'Configura OWNER y REPO arriba en el código para activar el listado.';
       return;
     }
 
     try {
-      const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/`);
-      if (!res.ok) throw new Error('GitHub respondió ' + res.status);
-      const files = await res.json();
+      // jsDelivr espeja repos públicos de GitHub con límites de consulta
+      // mucho más generosos que la API directa de GitHub — pensado para
+      // ser llamado desde el navegador de cada visitante, no una vez desde tu servidor.
+      const res = await fetch(`https://data.jsdelivr.com/v1/package/gh/${OWNER}/${REPO}@${BRANCH}/flat`);
+      if (!res.ok) throw new Error('jsDelivr respondió ' + res.status);
+      const data = await res.json();
+      const allFiles = data.files || [];
 
-      const htmlFiles = files.filter(f =>
-        f.type === 'file' &&
-        f.name.toLowerCase().endsWith('.html') &&
-        f.name.toLowerCase() !== 'index.html'
-      );
+      const htmlFiles = allFiles
+        .filter(f => {
+          const path = f.name.replace(/^\//, '');
+          return path.toLowerCase().endsWith('.html') &&
+                 path.toLowerCase() !== 'index.html' &&
+                 !path.includes('/'); // solo archivos en la raíz del repo
+        })
+        .map(f => ({ name: f.name.replace(/^\//, ''), size: f.size }));
 
       if (htmlFiles.length === 0){
         statusEl.textContent = '';
