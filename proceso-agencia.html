@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proceso de Agencia — De la prospección al cobro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0D10;
+    --bg2: #14171B;
+    --bg3: #1C2024;
+    --border: rgba(255,255,255,.09);
+    --text: #E7E9EA;
+    --text-dim: #8B939B;
+    --amber: #F5A623;
+    --green: #00D68F;
+    --red: #FF5C5C;
+    --blue: #4EA1FF;
+    --purple: #B98CFF;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif; letter-spacing:-0.01em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  header{
+    padding:56px 24px 40px;
+    max-width:960px;
+    margin:0 auto;
+    border-bottom:1px solid var(--border);
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{content:"●"; font-size:8px;}
+  header h1{
+    font-size:clamp(28px,4.5vw,44px);
+    font-weight:700;
+    max-width:16ch;
+    margin-bottom:16px;
+  }
+  header p{
+    color:var(--text-dim);
+    font-size:16px;
+    max-width:62ch;
+  }
+
+  .legend{
+    max-width:960px;
+    margin:28px auto 0;
+    padding:18px 24px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--text-dim);
+    background:var(--bg2);
+    border:1px solid var(--border);
+    padding:6px 12px 6px 10px;
+    border-radius:100px;
+  }
+  .dot{width:8px; height:8px; border-radius:50%; flex-shrink:0;}
+  .dot.ia{background:var(--purple);}
+  .dot.gestion{background:var(--blue);}
+  .dot.auto{background:var(--green);}
+  .dot.comms{background:var(--amber);}
+  .dot.dinero{background:#fff;}
+  .dot.diseno{background:#FF8FB1;}
+
+  .situacion{
+    max-width:960px;
+    margin:24px auto;
+    padding:20px 22px;
+    background:linear-gradient(135deg, rgba(255,92,92,.09), rgba(255,92,92,.02));
+    border:1px solid rgba(255,92,92,.35);
+    border-radius:14px;
+  }
+  .situacion .tag{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--red);
+    margin-bottom:10px;
+    display:block;
+  }
+  .situacion h3{font-size:17px; margin-bottom:8px;}
+  .situacion p{color:var(--text-dim); font-size:14.5px; margin-bottom:10px;}
+  .situacion ul{margin:10px 0 4px 0; padding-left:0; list-style:none;}
+  .situacion li{
+    font-size:14px;
+    color:var(--text);
+    padding:8px 0 8px 22px;
+    border-top:1px solid rgba(255,255,255,.06);
+    position:relative;
+  }
+  .situacion li::before{
+    content:"→";
+    position:absolute;
+    left:0;
+    color:var(--red);
+  }
+
+  .pipeline{
+    max-width:960px;
+    margin:48px auto 0;
+    padding:0 24px;
+    position:relative;
+  }
+  .phase-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    margin:44px 0 18px 60px;
+  }
+  .phase-label:first-child{margin-top:0;}
+
+  .node{
+    display:flex;
+    gap:20px;
+    position:relative;
+    padding-bottom:6px;
+  }
+  .node .line{
+    width:40px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .node .num{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:var(--bg2);
+    border:1.5px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'JetBrains Mono',monospace;
+    font-weight:600;
+    font-size:14px;
+    color:var(--text-dim);
+    flex-shrink:0;
+    z-index:2;
+    transition:all .2s ease;
+  }
+  .node .connector{
+    width:2px;
+    flex:1;
+    background:var(--green);
+    min-height:28px;
+  }
+  .node.risk .connector{
+    background:repeating-linear-gradient(to bottom, var(--red) 0 6px, transparent 6px 11px);
+  }
+  .node:last-child .connector{display:none;}
+
+  .node.current .num{
+    background:var(--amber);
+    border-color:var(--amber);
+    color:#0B0D10;
+    box-shadow:0 0 0 5px rgba(245,166,35,.16);
+  }
+
+  .card{
+    flex:1;
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:28px;
+    overflow:hidden;
+    transition:border-color .2s ease;
+  }
+  .node.current .card{border-color:rgba(245,166,35,.5);}
+  .node.risk .card{border-color:rgba(255,92,92,.3);}
+
+  .card-head{
+    padding:16px 20px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .card-head:hover{background:rgba(255,255,255,.02);}
+  .card-title-wrap{flex:1;}
+  .card-title{font-size:15.5px; font-weight:600; margin-bottom:4px;}
+  .card-sub{font-size:13px; color:var(--text-dim);}
+  .here-badge{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    background:var(--amber);
+    color:#0B0D10;
+    padding:3px 8px;
+    border-radius:100px;
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .chevron{
+    color:var(--text-dim);
+    font-size:13px;
+    transition:transform .25s ease;
+    flex-shrink:0;
+  }
+  .node.open .chevron{transform:rotate(180deg);}
+
+  .card-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+  }
+  .node.open .card-body{max-height:700px;}
+  .card-body-inner{
+    padding:0 20px 20px;
+    border-top:1px solid var(--border);
+    padding-top:16px;
+  }
+  .card-body p{font-size:14px; color:var(--text-dim); margin-bottom:14px;}
+
+  .tools{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
+  .tool-chip{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    padding:5px 10px;
+    border-radius:7px;
+    background:var(--bg3);
+    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  .bottleneck{
+    background:rgba(255,92,92,.07);
+    border:1px solid rgba(255,92,92,.28);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:13.5px;
+    color:#ffb8b8;
+    display:flex;
+    gap:10px;
+  }
+  .bottleneck b{color:var(--red);}
+  .output{
+    font-size:13px;
+    color:var(--text-dim);
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid var(--border);
+  }
+  .output b{color:var(--text); font-weight:600;}
+
+  footer{
+    max-width:960px;
+    margin:60px auto 0;
+    padding:24px 24px 0;
+    border-top:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:13px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  @media (max-width:640px){
+    header{padding:40px 18px 28px;}
+    .legend, .situacion, .pipeline, footer{padding-left:18px; padding-right:18px;}
+    .phase-label{margin-left:50px;}
+    .node{gap:12px;}
+    .node .line, .node .num{width:32px;}
+    .node .num{height:32px; font-size:12px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Documentación interna · Proceso operativo</div>
+  <h1>De la prospección al cobro</h1>
+  <p>Un solo flujo, de principio a fin, para que la información deje de estar repartida entre WhatsApp, la memoria y varios chats de IA distintos. Cada etapa se puede abrir para ver qué hacer, con qué herramienta, y dónde suele generarse un cuello de botella.</p>
+</header>
+
+<div class="legend">
+  <span class="legend-item"><span class="dot ia"></span>IA (Claude / ChatGPT / Gemini)</span>
+  <span class="legend-item"><span class="dot gestion"></span>Gestión (Notion)</span>
+  <span class="legend-item"><span class="dot diseno"></span>Diseño</span>
+  <span class="legend-item"><span class="dot auto"></span>Automatización (n8n / VPS)</span>
+  <span class="legend-item"><span class="dot comms"></span>Comunicación</span>
+  <span class="legend-item"><span class="dot dinero"></span>Dinero / entregable</span>
+</div>
+
+<div class="situacion">
+  <span class="tag">⚠ Situación actual</span>
+  <h3>Etapa 5 (Propuesta) sin haber pasado por la Etapa 2 (investigación)</h3>
+  <p>Ya hubo una conversación con este cliente y hay que entregar la propuesta, sin investigación previa. Este tipo de salto es justamente el cuello de botella que este documento busca prevenir a futuro. Para esta propuesta puntual, se puede compensar con un mensaje corto antes de definir el precio:</p>
+  <ul>
+    <li>¿Cómo están consiguiendo clientes nuevos hoy: internet, referidos, o ambos?</li>
+    <li>¿Cuánto le cuesta al mes no tener esto resuelto?</li>
+    <li>Si esto queda resuelto, ¿cuánto ingreso adicional representaría al mes?</li>
+  </ul>
+  <p style="margin-top:12px; margin-bottom:0;">Con esas tres respuestas, el precio queda anclado a la ganancia del cliente y no a las horas invertidas. La Etapa 5 más abajo tiene la estructura completa de la propuesta.</p>
+</div>
+
+<div class="pipeline" id="pipeline"></div>
+
+<footer>
+  <span>Actualizar este documento cuando cambie una herramienta o un paso — no debe quedar como una foto fija.</span>
+  <span class="mono">v2 · jul 2026</span>
+</footer>
+
+<script>
+const DATA = [
+  { phase:"Antes de contactar", items:[
+    {
+      title:"Elegir el nicho del día",
+      sub:"Definir a qué tipo de negocio se aborda hoy",
+      desc:"Antes de salir a prospectar, se elige un rubro concreto (restaurante, kinesiología, ferretería, etc.) en vez de avanzar sin criterio. Se repasan los problemas típicos de ese rubro antes de moverse.",
+      tools:[{c:"gestion",t:"Notion — banco de nichos"}],
+      output:"Un rubro definido y 2-3 problemas típicos identificados de antemano."
+    },
+    {
+      title:"Investigar antes de contactar",
+      sub:"El paso que se salta cuando hay apuro, y que después se paga",
+      desc:"Se busca el negocio en Google, se revisan sus redes y su ficha de Maps. El objetivo es identificar 1-2 problemas visibles antes de hablar con el dueño, para que la conversación empiece con un dato concreto y no con un discurso genérico.",
+      tools:[{c:"comms",t:"Google / Maps"},{c:"comms",t:"Instagram / Facebook"}],
+      risk:"Si se llega a la etapa de Propuesta sin haber pasado por acá, el precio queda anclado a suposiciones en vez de a un problema real del cliente. Se compensa con 2-3 preguntas de descubrimiento antes de definir el número.",
+      output:"1-2 problemas concretos y visibles para mencionar en la conversación."
+    },
+  ]},
+  { phase:"Contacto y descubrimiento", items:[
+    {
+      title:"Primer contacto",
+      sub:"Todavía no se vende: se pregunta",
+      desc:"El objetivo de los primeros minutos es generar curiosidad, no presentar servicios. Quien pregunta controla la conversación. Conviene dejar que el problema lo diga el dueño con sus propias palabras.",
+      tools:[{c:"comms",t:"Presencial / WhatsApp"}],
+      output:"Acuerdo para una conversación más larga: la reunión de descubrimiento."
+    },
+    {
+      title:"Reunión de descubrimiento",
+      sub:"Acá se decide si la propuesta se vende sola o no",
+      desc:"Preguntas de situación (cómo consigue clientes hoy) y de dolor (cuánto le cuesta no resolverlo). Se cierra con la pregunta clave: 'si esto queda resuelto, ¿cuánto representa en ingresos al mes?'. Esa respuesta ancla el precio a la ganancia del cliente.",
+      tools:[{c:"gestion",t:"Notion — notas de la reunión"}],
+      output:"Las palabras exactas del cliente sobre su problema y una cifra de referencia para el precio."
+    },
+  ]},
+  { phase:"Propuesta y cierre", items:[
+    {
+      title:"Redactar la propuesta",
+      sub:"5 partes: problema, solución, precio anclado, garantía, próximo paso",
+      desc:"Se describe el problema con las palabras del cliente, no las propias. Sin portafolio, se compensa con precio reducido más garantía de devolución. Se termina siempre con una acción concreta y una fecha, nunca con un 'quedamos en contacto'.",
+      tools:[{c:"ia",t:"Claude — redacción y estructura"},{c:"gestion",t:"Notion / Docs"}],
+      current:true,
+      output:"Documento de propuesta listo para enviar, con precio, plazo y próximo paso definido."
+    },
+    {
+      title:"Cierre, contrato y 50% de adelanto",
+      sub:"Regla no negociable: nunca construir sin adelanto",
+      desc:"El acuerdo se deja por escrito (aunque sea simple) y se cobra el 50% antes de empezar. Ya ocurrió antes: se perdió trabajo por empezar a construir sin acuerdo firmado ni adelanto cobrado. No se repite, sin excepciones, sin importar cuán buena parezca la relación con el cliente.",
+      tools:[{c:"ia",t:"Claude — contrato simple"},{c:"dinero",t:"Transferencia / factura"}],
+      risk:"Este es el cuello de botella más caro de todo el proceso. Si el cliente no adelanta, el desarrollo no arranca, sin excepción.",
+      output:"Contrato firmado y 50% cobrado y confirmado antes de escribir la primera línea de código o diseño."
+    },
+  ]},
+  { phase:"Planificación y diseño", items:[
+    {
+      title:"Definir alcance y flujo técnico",
+      sub:"Qué se construye exactamente, paso por paso",
+      desc:"Antes de diseñar o programar, se define por escrito qué pantallas o flujos existen, qué hace cada uno, y qué queda explícitamente fuera del alcance (para usarlo después ante pedidos de 'una cosa más'). En automatizaciones, esto es el diagrama de pasos del flujo en n8n.",
+      tools:[{c:"ia",t:"Claude — mapa de alcance"},{c:"gestion",t:"Notion — documento de alcance"}],
+      risk:"Sin este documento, el alcance queda solo en la memoria y es lo primero que se pierde cuando el cliente pide cambios a mitad de camino.",
+      output:"Lista de pantallas o flujos, qué incluye cada uno, y qué queda fuera del precio acordado."
+    },
+    {
+      title:"Diseño visual",
+      sub:"Paleta, estilo y mockups antes de programar",
+      desc:"Se define la identidad visual (colores, tipografía, tono) y se arman mockups o referencias visuales rápidas para validar con el cliente antes de invertir tiempo de desarrollo en algo que después haya que rehacer.",
+      tools:[{c:"diseno",t:"Canva"},{c:"ia",t:"ChatGPT — imágenes de referencia"}],
+      risk:"Programar antes de acordar el diseño visual suele terminar en retrabajo: es más barato cambiar un mockup que una pantalla ya construida.",
+      output:"Mockup o referencia visual aprobada por el cliente."
+    },
+  ]},
+  { phase:"Desarrollo", items:[
+    {
+      title:"Construcción",
+      sub:"Se construye lo acordado, ni más ni menos",
+      desc:"Sitio, chatbot o automatización, según el paquete vendido. Cualquier pedido nuevo del cliente en esta etapa se filtra por la política de mejoras: ¿se usa una vez (cobro aparte) o da valor todos los meses (sube la mensualidad)? No se resuelve en caliente, se consulta el documento de alcance de la etapa anterior.",
+      tools:[{c:"ia",t:"Claude Code — desarrollo"},{c:"auto",t:"n8n (VPS Hetzner)"},{c:"auto",t:"Supabase"},{c:"auto",t:"Vercel"}],
+      risk:"El aumento de alcance silencioso: el cliente pide 'algo más' y se construye gratis sin pasar por la política de mejoras.",
+      output:"Producto funcional según lo definido en el alcance."
+    },
+    {
+      title:"Pruebas y control de calidad",
+      sub:"Antes de mostrarle nada al cliente",
+      desc:"Se revisa el resultado en distintos dispositivos y navegadores, se prueban los flujos completos (no solo el camino esperado) y se corrigen errores antes de la entrega. En automatizaciones, se revisan las ejecuciones reales, no solo las pruebas manuales.",
+      tools:[{c:"ia",t:"Claude — revisión de errores"}],
+      risk:"Entregar sin probar traslada el control de calidad al cliente, que lo nota y lo recuerda.",
+      output:"Checklist de pruebas superado, sin errores visibles conocidos."
+    },
+    {
+      title:"Despliegue",
+      sub:"Poner el trabajo en producción, con dominio propio",
+      desc:"Publicación en el hosting definitivo (no en un entorno de prueba), configuración del dominio del cliente, y verificación de que todo funciona en la dirección final que va a usar el negocio.",
+      tools:[{c:"auto",t:"Vercel / VPS"},{c:"comms",t:"Configuración de dominio"}],
+      output:"Producto en vivo, accesible en la dirección definitiva del cliente."
+    },
+  ]},
+  { phase:"Entrega", items:[
+    {
+      title:"Entrega y 50% restante",
+      sub:"Se demuestra el resultado, se cobra el saldo",
+      desc:"Se muestra el resultado en vivo (capturas, panel, demostración funcionando) antes de solicitar el saldo. El valor se justifica con evidencia, no con la promesa de que 'ya está listo'.",
+      tools:[{c:"comms",t:"Reunión / WhatsApp"},{c:"dinero",t:"Transferencia final"}],
+      output:"Proyecto entregado, cobro completo, cliente activo."
+    },
+  ]},
+  { phase:"Post-entrega", items:[
+    {
+      title:"Seguimiento y mensualidad",
+      sub:"La mayoría de las ventas de seguimiento ocurren después del 5º contacto",
+      desc:"Secuencia de seguimiento post-entrega (día 1, día 3, día 7) con valor real en cada mensaje, no solo una consulta genérica. El soporte y mantenimiento incluidos en la mensualidad se documentan por escrito desde la propuesta inicial, para no negociarlos cada vez.",
+      tools:[{c:"comms",t:"WhatsApp — secuencia D1/D3/D7"},{c:"auto",t:"n8n — monitor de errores"},{c:"gestion",t:"Notion — seguimiento"}],
+      output:"Cliente recurrente, mensualidad activa, base para pedir referidos."
+    },
+    {
+      title:"Documentar y aprender",
+      sub:"Lo que alimenta el tiempo reservado para la startup",
+      desc:"Qué funcionó, qué no, qué plantilla se puede reutilizar en el próximo cliente. Cada proyecto cerrado debería reducir el tiempo de entrega del siguiente y permitir subir progresivamente el precio de entrada para clientes nuevos (nunca para el mismo cliente).",
+      tools:[{c:"gestion",t:"Notion — retro del proyecto"}],
+      output:"Una plantilla, un guion o un aprendizaje reutilizable, menos disperso que antes."
+    },
+  ]},
+];
+
+const pipeline = document.getElementById('pipeline');
+let counter = 0;
+
+DATA.forEach(group => {
+  const label = document.createElement('div');
+  label.className = 'phase-label';
+  label.textContent = group.phase;
+  pipeline.appendChild(label);
+
+  group.items.forEach(item => {
+    counter++;
+    const node = document.createElement('div');
+    node.className = 'node' + (item.risk ? ' risk' : '') + (item.current ? ' current' : '');
+
+    const toolsHTML = item.tools.map(t => `<span class="tool-chip"><span class="dot ${t.c}"></span>${t.t}</span>`).join('');
+    const riskHTML = item.risk ? `<div class="bottleneck">⚠️ <div><b>Riesgo de cuello de botella:</b> ${item.risk}</div></div>` : '';
+    const badgeHTML = item.current ? '<span class="here-badge">Etapa actual</span>' : '';
+
+    node.innerHTML = `
+      <div class="line">
+        <div class="num">${String(counter).padStart(2,'0')}</div>
+        <div class="connector"></div>
+      </div>
+      <div class="card">
+        <div class="card-head" onclick="this.closest('.node').classList.toggle('open')">
+          <div class="card-title-wrap">
+            <div class="card-title">${item.title}</div>
+            <div class="card-sub">${item.sub}</div>
+          </div>
+          ${badgeHTML}
+          <div class="chevron">▾</div>
+        </div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>${item.desc}</p>
+            <div class="tools">${toolsHTML}</div>
+            ${riskHTML}
+            <div class="output"><b>Resultado esperado →</b> ${item.output}</div>
+          </div>
+        </div>
+      </div>
+    `;
+    pipeline.appendChild(node);
+  });
+});
+
+document.querySelector('.node.current')?.classList.add('open');
+document.querySelector('.node.current')?.scrollIntoView({block:'center'});
+</script>
+
+</body>
+</html>
